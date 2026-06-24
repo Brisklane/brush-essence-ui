@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+/*
+ * Tailwind v4 is configured CSS-first: design tokens live here in `@theme`
+ * (no tailwind.config.js needed). Tokens below generate utilities such as
+ * `bg-brand-600`, `text-canvas`, etc.
+ */
+@theme {
+  /* Brand palette — warm, gallery-inspired tones for an oil-painting store. */
+  --color-brand-50: #fdf6f0;
+  --color-brand-100: #f8e6d6;
+  --color-brand-200: #f0c9a8;
+  --color-brand-300: #e6a978;
+  --color-brand-400: #d98b4f;
+  --color-brand-500: #c9722f;
+  --color-brand-600: #b15c24;
+  --color-brand-700: #8f471f;
+  --color-brand-800: #6f381c;
+  --color-brand-900: #5a2f1a;
+
+  /* Semantic surface colors. */
+  --color-canvas: #faf8f5;
+  --color-ink: #1c1917;
+}
+
+:root {
+  --background: #faf8f5;
+  --foreground: #1c1917;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #14110f;
+    --foreground: #f5f1ec;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
