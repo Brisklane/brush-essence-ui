@@ -11,7 +11,7 @@ import {
   type ForgotPasswordValues,
 } from "@/lib/validations/auth";
 
-import { FormField } from "./form-field";
+import { FormField } from "@/components/forms";
 
 export function ForgotPasswordForm() {
   const [submitted, setSubmitted] = useState(false);

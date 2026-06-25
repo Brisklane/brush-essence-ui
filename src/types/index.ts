@@ -1,6 +1,6 @@
 /**
- * Shared domain types for the frontend. `Painting` mirrors the API's
- * `PaintingDto` so data flows from backend to UI with a single source of truth.
+ * Shared domain types for the frontend. These mirror the API's DTOs so data
+ * flows from backend to UI with a single source of truth.
  */
 export interface Painting {
   id: string;
@@ -14,5 +14,25 @@ export interface Painting {
   imageUrl: string | null;
   stockQuantity: number;
   isPublished: boolean;
+  categoryId: string | null;
+  categoryName: string | null;
   createdAt: string;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  createdAt: string;
+}
+
+export interface PagedResult<T> {
+  items: T[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+  hasPrevious: boolean;
+  hasNext: boolean;
 }

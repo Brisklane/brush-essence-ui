@@ -12,7 +12,7 @@ import {
   type ResetPasswordValues,
 } from "@/lib/validations/auth";
 
-import { FormField } from "./form-field";
+import { FormField } from "@/components/forms";
 
 export function ResetPasswordForm() {
   const searchParams = useSearchParams();
