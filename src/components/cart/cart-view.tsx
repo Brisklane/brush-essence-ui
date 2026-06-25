@@ -89,9 +89,12 @@ export function CartView() {
         currency={cart.currency}
         itemCount={itemCount}
       >
-        <Button size="lg" className="w-full" disabled>
-          Checkout (coming soon)
-        </Button>
+        <Link
+          href="/checkout"
+          className={cn(buttonVariants({ size: "lg" }), "w-full")}
+        >
+          Proceed to checkout
+        </Link>
         <Link
           href="/gallery"
           className={cn(buttonVariants({ variant: "ghost" }), "mt-2 w-full")}
