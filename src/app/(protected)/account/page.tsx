@@ -3,9 +3,12 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
+import Link from "next/link";
+
 import { Container } from "@/components/layout";
-import { Button } from "@/components/ui";
+import { Button, buttonVariants } from "@/components/ui";
 import { useAuth } from "@/hooks/use-auth";
+import { cn } from "@/lib/utils";
 
 export default function AccountPage() {
   const { user, status, logout } = useAuth();
@@ -54,7 +57,10 @@ export default function AccountPage() {
           </div>
         </dl>
 
-        <div className="mt-8">
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link href="/orders" className={cn(buttonVariants({}))}>
+            View your orders
+          </Link>
           <Button variant="outline" onClick={handleLogout}>
             Sign out
           </Button>

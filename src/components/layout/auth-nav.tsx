@@ -35,6 +35,9 @@ export function AuthNav() {
             Admin
           </Link>
         ) : null}
+        <Link href="/orders" className={linkClass}>
+          Orders
+        </Link>
         <Link href="/account" className={linkClass}>
           Account
         </Link>

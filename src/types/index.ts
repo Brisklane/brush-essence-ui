@@ -47,6 +47,72 @@ export interface Cart {
   currency: string;
 }
 
+export type OrderStatus =
+  | "Placed"
+  | "Processing"
+  | "Shipped"
+  | "Delivered"
+  | "Cancelled";
+
+export interface ShippingAddress {
+  fullName: string;
+  line1: string;
+  line2: string | null;
+  city: string;
+  region: string | null;
+  postalCode: string;
+  country: string;
+  phone: string | null;
+}
+
+export interface OrderItem {
+  id: string;
+  paintingId: string | null;
+  title: string;
+  imageUrl: string | null;
+  unitPrice: number;
+  quantity: number;
+  lineTotal: number;
+}
+
+export interface Order {
+  id: string;
+  orderNumber: string;
+  customerEmail: string;
+  status: OrderStatus;
+  shippingAddress: ShippingAddress;
+  currency: string;
+  subtotal: number;
+  shippingCost: number;
+  total: number;
+  items: OrderItem[];
+  createdAt: string;
+}
+
+export interface OrderSummary {
+  id: string;
+  orderNumber: string;
+  status: OrderStatus;
+  currency: string;
+  total: number;
+  itemCount: number;
+  createdAt: string;
+}
+
+export interface OrderStatusEvent {
+  status: OrderStatus;
+  note: string | null;
+  occurredAt: string;
+}
+
+export interface OrderTracking {
+  id: string;
+  orderNumber: string;
+  status: OrderStatus;
+  isComplete: boolean;
+  history: OrderStatusEvent[];
+}
+
 export interface PagedResult<T> {
   items: T[];
   totalCount: number;
