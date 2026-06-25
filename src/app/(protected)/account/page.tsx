@@ -61,6 +61,12 @@ export default function AccountPage() {
           <Link href="/orders" className={cn(buttonVariants({}))}>
             View your orders
           </Link>
+          <Link
+            href="/custom-requests"
+            className={cn(buttonVariants({ variant: "outline" }))}
+          >
+            Custom requests
+          </Link>
           <Button variant="outline" onClick={handleLogout}>
             Sign out
           </Button>
