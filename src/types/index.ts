@@ -27,6 +27,26 @@ export interface Category {
   createdAt: string;
 }
 
+export interface CartItem {
+  id: string;
+  paintingId: string;
+  title: string;
+  imageUrl: string | null;
+  unitPrice: number;
+  currency: string;
+  quantity: number;
+  stockQuantity: number;
+  lineTotal: number;
+}
+
+export interface Cart {
+  id: string;
+  items: CartItem[];
+  totalQuantity: number;
+  subtotal: number;
+  currency: string;
+}
+
 export interface PagedResult<T> {
   items: T[];
   totalCount: number;

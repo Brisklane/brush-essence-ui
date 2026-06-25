@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { CartIcon, CloseIcon, MenuIcon, SearchIcon, ThemeToggle } from "@/components/ui";
 import { siteConfig } from "@/config/site";
+import { useCart } from "@/hooks/use-cart";
 import { cn } from "@/lib/utils";
 
 import { AuthNav } from "./auth-nav";
@@ -99,21 +100,28 @@ export function Header() {
   );
 }
 
-/** Cart entry point. The cart epic isn't built yet, so this is a stub. */
+/** Cart entry point: links to the cart page with a live item-count badge. */
 function CartButton() {
+  const { itemCount } = useCart();
+  const label =
+    itemCount > 0
+      ? `Your cart, ${itemCount} ${itemCount === 1 ? "item" : "items"}`
+      : "Your cart";
+
   return (
-    <button
-      type="button"
-      title="Your cart (coming soon)"
-      aria-label="Cart — coming soon"
-      onClick={() => alert("Your cart is coming soon!")}
+    <Link
+      href="/cart"
+      title="Your cart"
+      aria-label={label}
       className="text-muted hover:text-foreground relative inline-flex size-9 items-center justify-center rounded-full text-lg"
     >
       <CartIcon />
-      <span className="bg-brand-600 absolute -top-0.5 -right-0.5 inline-flex size-4 items-center justify-center rounded-full text-[0.6rem] font-semibold text-white">
-        0
-      </span>
-    </button>
+      {itemCount > 0 ? (
+        <span className="bg-brand-600 absolute -top-0.5 -right-0.5 inline-flex min-w-4 items-center justify-center rounded-full px-1 text-[0.6rem] font-semibold text-white">
+          {itemCount > 99 ? "99+" : itemCount}
+        </span>
+      ) : null}
+    </Link>
   );
 }
 

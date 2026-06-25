@@ -4,6 +4,7 @@ import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import { Footer, Header } from "@/components/layout";
 import { siteConfig } from "@/config/site";
 import { AuthProvider } from "@/providers/auth-provider";
+import { CartProvider } from "@/providers/cart-provider";
 import { ThemeProvider, themeInitScript } from "@/providers/theme-provider";
 
 import "./globals.css";
@@ -51,9 +52,11 @@ export default function RootLayout({
       <body className="flex min-h-full flex-col">
         <ThemeProvider>
           <AuthProvider>
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
+            <CartProvider>
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </CartProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>
