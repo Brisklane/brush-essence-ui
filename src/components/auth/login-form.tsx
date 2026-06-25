@@ -10,7 +10,7 @@ import { Button } from "@/components/ui";
 import { useAuth } from "@/hooks/use-auth";
 import { loginSchema, type LoginValues } from "@/lib/validations/auth";
 
-import { FormField } from "./form-field";
+import { FormField } from "@/components/forms";
 
 export function LoginForm() {
   const { login } = useAuth();

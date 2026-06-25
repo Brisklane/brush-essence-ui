@@ -1,71 +1,73 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import { Container } from "@/components/layout";
-import { useAuth } from "@/hooks/use-auth";
-import { apiFetch } from "@/lib/api-client";
+import {
+  buttonVariants,
+  Card,
+  CardContent,
+  CardDescription,
+  CardTitle,
+} from "@/components/ui";
+import { listCategories, listPaintings } from "@/lib/catalog-api";
+import { cn } from "@/lib/utils";
 
-export default function AdminPage() {
-  const { user, status } = useAuth();
-  const router = useRouter();
-  const [message, setMessage] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  const isAdmin = user?.roles.includes("Admin") ?? false;
-
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      router.replace("/login?redirect=/admin");
-    }
-  }, [status, router]);
+export default function AdminDashboardPage() {
+  const [paintingCount, setPaintingCount] = useState<number | null>(null);
+  const [categoryCount, setCategoryCount] = useState<number | null>(null);
 
   useEffect(() => {
-    if (status !== "authenticated" || !isAdmin) {
-      return;
-    }
-    apiFetch("/api/admin/overview")
-      .then(async (response) => {
-        if (response.ok) {
-          const data = (await response.json()) as { message: string };
-          setMessage(data.message);
-        } else {
-          setError("You do not have access to this area.");
-        }
-      })
-      .catch(() => setError("Failed to reach the server."));
-  }, [status, isAdmin]);
-
-  if (status !== "authenticated" || !user) {
-    return (
-      <Container className="py-16">
-        <p className="text-stone-600">Loading…</p>
-      </Container>
-    );
-  }
-
-  if (!isAdmin) {
-    return (
-      <Container className="py-16">
-        <h1 className="text-ink text-2xl font-semibold">Admin</h1>
-        <p className="mt-4 text-red-700">
-          403 — this area is restricted to administrators.
-        </p>
-      </Container>
-    );
-  }
+    listPaintings({ page: 1, pageSize: 1 })
+      .then((result) => setPaintingCount(result.totalCount))
+      .catch(() => setPaintingCount(null));
+    listCategories()
+      .then((categories) => setCategoryCount(categories.length))
+      .catch(() => setCategoryCount(null));
+  }, []);
 
   return (
-    <Container className="py-16">
-      <h1 className="text-ink text-2xl font-semibold">Admin</h1>
-      {error ? (
-        <p className="mt-4 text-red-700">{error}</p>
-      ) : (
-        <p className="mt-4 text-stone-600">
-          {message ?? "Loading admin data…"}
-        </p>
-      )}
-    </Container>
+    <div className="p-6 sm:p-8">
+      <h1 className="text-ink text-2xl font-semibold">Dashboard</h1>
+      <p className="mt-1 text-stone-600">Manage your painting catalogue.</p>
+
+      <div className="mt-6 grid gap-4 sm:grid-cols-2">
+        <Card>
+          <CardContent>
+            <CardTitle>Paintings</CardTitle>
+            <CardDescription className="mt-1">
+              {paintingCount ?? "—"} total
+            </CardDescription>
+            <Link
+              href="/admin/paintings"
+              className={cn(
+                buttonVariants({ size: "sm", variant: "outline" }),
+                "mt-4",
+              )}
+            >
+              Manage paintings
+            </Link>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent>
+            <CardTitle>Categories</CardTitle>
+            <CardDescription className="mt-1">
+              {categoryCount ?? "—"} total
+            </CardDescription>
+            <Link
+              href="/admin/categories"
+              className={cn(
+                buttonVariants({ size: "sm", variant: "outline" }),
+                "mt-4",
+              )}
+            >
+              Manage categories
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   );
 }

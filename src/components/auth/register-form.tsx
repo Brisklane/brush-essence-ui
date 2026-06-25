@@ -10,7 +10,7 @@ import { Button } from "@/components/ui";
 import { useAuth } from "@/hooks/use-auth";
 import { registerSchema, type RegisterValues } from "@/lib/validations/auth";
 
-import { FormField } from "./form-field";
+import { FormField } from "@/components/forms";
 
 export function RegisterForm() {
   const { register: registerUser } = useAuth();
