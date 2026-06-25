@@ -1,0 +1,65 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
+import { Container } from "@/components/layout";
+import { Button } from "@/components/ui";
+import { useAuth } from "@/hooks/use-auth";
+
+export default function AccountPage() {
+  const { user, status, logout } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.replace("/login?redirect=/account");
+    }
+  }, [status, router]);
+
+  async function handleLogout() {
+    await logout();
+    router.replace("/login");
+  }
+
+  if (status !== "authenticated" || !user) {
+    return (
+      <Container className="py-16">
+        <p className="text-stone-600">Loading…</p>
+      </Container>
+    );
+  }
+
+  return (
+    <Container className="py-16">
+      <div className="mx-auto max-w-xl rounded-xl border border-stone-200 bg-white p-8 shadow-sm">
+        <h1 className="text-ink text-2xl font-semibold">Your account</h1>
+
+        <dl className="mt-6 space-y-3 text-sm">
+          <div className="flex justify-between gap-4">
+            <dt className="text-stone-500">Email</dt>
+            <dd className="text-ink">{user.email}</dd>
+          </div>
+          <div className="flex justify-between gap-4">
+            <dt className="text-stone-500">Name</dt>
+            <dd className="text-ink">{user.fullName ?? "—"}</dd>
+          </div>
+          <div className="flex justify-between gap-4">
+            <dt className="text-stone-500">Roles</dt>
+            <dd className="text-ink">{user.roles.join(", ") || "—"}</dd>
+          </div>
+          <div className="flex justify-between gap-4">
+            <dt className="text-stone-500">Email verified</dt>
+            <dd className="text-ink">{user.isEmailVerified ? "Yes" : "No"}</dd>
+          </div>
+        </dl>
+
+        <div className="mt-8">
+          <Button variant="outline" onClick={handleLogout}>
+            Sign out
+          </Button>
+        </div>
+      </div>
+    </Container>
+  );
+}
