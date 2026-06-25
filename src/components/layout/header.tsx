@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { siteConfig } from "@/config/site";
 
+import { AuthNav } from "./auth-nav";
 import { Container } from "./container";
 
 export function Header() {
@@ -14,17 +15,20 @@ export function Header() {
         >
           {siteConfig.name}
         </Link>
-        <nav className="hidden items-center gap-8 sm:flex">
-          {siteConfig.nav.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="hover:text-brand-700 text-sm font-medium text-stone-600 transition-colors"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        <div className="flex items-center gap-8">
+          <nav className="hidden items-center gap-8 sm:flex">
+            {siteConfig.nav.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="hover:text-brand-700 text-sm font-medium text-stone-600 transition-colors"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+          <AuthNav />
+        </div>
       </Container>
     </header>
   );
