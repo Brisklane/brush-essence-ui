@@ -113,6 +113,48 @@ export interface OrderTracking {
   history: OrderStatusEvent[];
 }
 
+export type CustomRequestStatus =
+  | "Submitted"
+  | "Reviewed"
+  | "InProgress"
+  | "Completed"
+  | "Declined";
+
+export interface CustomRequestImage {
+  id: string;
+  url: string;
+  fileName: string | null;
+}
+
+export interface CustomRequestStatusEvent {
+  status: CustomRequestStatus;
+  note: string | null;
+  occurredAt: string;
+}
+
+export interface CustomRequest {
+  id: string;
+  customerEmail: string;
+  title: string;
+  description: string;
+  preferredSize: string | null;
+  budgetAmount: number | null;
+  currency: string;
+  status: CustomRequestStatus;
+  isEditable: boolean;
+  images: CustomRequestImage[];
+  history: CustomRequestStatusEvent[];
+  createdAt: string;
+}
+
+export interface CustomRequestSummary {
+  id: string;
+  title: string;
+  status: CustomRequestStatus;
+  imageCount: number;
+  createdAt: string;
+}
+
 export interface PagedResult<T> {
   items: T[];
   totalCount: number;
