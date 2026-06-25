@@ -87,7 +87,7 @@ export function RegisterForm() {
         {isSubmitting ? "Creating account…" : "Create account"}
       </Button>
 
-      <p className="text-center text-sm text-stone-600">
+      <p className="text-center text-sm text-muted">
         Already have an account?{" "}
         <Link href="/login" className="text-brand-700 hover:text-brand-800">
           Sign in

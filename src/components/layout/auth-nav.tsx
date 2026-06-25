@@ -7,7 +7,7 @@ import { buttonVariants } from "@/components/ui";
 import { useAuth } from "@/hooks/use-auth";
 
 const linkClass =
-  "text-sm font-medium text-stone-600 transition-colors hover:text-brand-700";
+  "text-muted hover:text-foreground text-sm font-medium transition-colors";
 
 export function AuthNav() {
   const { user, status, logout } = useAuth();
@@ -16,7 +16,7 @@ export function AuthNav() {
   if (status === "loading") {
     return (
       <div
-        className="h-9 w-20 animate-pulse rounded-md bg-stone-200"
+        className="h-9 w-20 animate-pulse rounded-md bg-surface-2"
         aria-hidden
       />
     );

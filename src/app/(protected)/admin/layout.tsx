@@ -21,7 +21,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   if (status === "loading" || status === "unauthenticated") {
     return (
       <Container className="py-16">
-        <p className="text-stone-600">Loading…</p>
+        <p className="text-muted">Loading…</p>
       </Container>
     );
   }
@@ -29,7 +29,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   if (!isAdmin) {
     return (
       <Container className="py-16">
-        <h1 className="text-ink text-2xl font-semibold">Admin</h1>
+        <h1 className="text-foreground text-2xl font-semibold">Admin</h1>
         <p className="mt-4 text-red-700">
           403 — this area is restricted to administrators.
         </p>

@@ -4,3 +4,8 @@ export * from "./textarea";
 export * from "./select";
 export * from "./card";
 export * from "./confirm-dialog";
+export * from "./icons";
+export * from "./theme-toggle";
+export * from "./badge";
+export * from "./price";
+export * from "./spinner";

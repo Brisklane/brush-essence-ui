@@ -86,7 +86,7 @@ export default function PaintingsListPage() {
   return (
     <div className="p-6 sm:p-8">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-ink text-2xl font-semibold">Paintings</h1>
+        <h1 className="text-foreground text-2xl font-semibold">Paintings</h1>
         <Link href="/admin/paintings/new" className={buttonVariants({})}>
           Add painting
         </Link>
@@ -110,9 +110,9 @@ export default function PaintingsListPage() {
         </p>
       ) : null}
 
-      <div className="mt-6 overflow-x-auto rounded-xl border border-stone-200 bg-white">
+      <div className="mt-6 overflow-x-auto rounded-xl border border-border bg-surface">
         <table className="w-full text-left text-sm">
-          <thead className="border-b border-stone-200 text-stone-500">
+          <thead className="border-b border-border text-muted">
             <tr>
               <th className="p-3 font-medium">Image</th>
               <th className="p-3 font-medium">Title</th>
@@ -125,7 +125,7 @@ export default function PaintingsListPage() {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={6} className="p-6 text-center text-stone-500">
+                <td colSpan={6} className="p-6 text-center text-muted">
                   Loading…
                 </td>
               </tr>
@@ -135,7 +135,7 @@ export default function PaintingsListPage() {
                 return (
                   <tr
                     key={painting.id}
-                    className="border-b border-stone-100 last:border-0"
+                    className="border-b border-border last:border-0"
                   >
                     <td className="p-3">
                       {image ? (
@@ -146,16 +146,16 @@ export default function PaintingsListPage() {
                           className="h-12 w-12 rounded object-cover"
                         />
                       ) : (
-                        <div className="h-12 w-12 rounded bg-stone-100" />
+                        <div className="h-12 w-12 rounded bg-surface-2" />
                       )}
                     </td>
-                    <td className="text-ink p-3 font-medium">
+                    <td className="text-foreground p-3 font-medium">
                       {painting.title}
                     </td>
-                    <td className="p-3 text-stone-600">
+                    <td className="p-3 text-muted">
                       {painting.categoryName ?? "—"}
                     </td>
-                    <td className="p-3 text-stone-600">
+                    <td className="p-3 text-muted">
                       {painting.currency} {painting.price.toFixed(2)}
                     </td>
                     <td className="p-3">
@@ -164,7 +164,7 @@ export default function PaintingsListPage() {
                           "rounded-full px-2 py-0.5 text-xs font-medium",
                           painting.isPublished
                             ? "bg-green-100 text-green-700"
-                            : "bg-stone-100 text-stone-600",
+                            : "bg-surface-2 text-muted",
                         )}
                       >
                         {painting.isPublished ? "Published" : "Draft"}
@@ -192,7 +192,7 @@ export default function PaintingsListPage() {
               })
             ) : (
               <tr>
-                <td colSpan={6} className="p-6 text-center text-stone-500">
+                <td colSpan={6} className="p-6 text-center text-muted">
                   No paintings yet.
                 </td>
               </tr>
@@ -203,7 +203,7 @@ export default function PaintingsListPage() {
 
       {data && data.totalPages > 1 ? (
         <div className="mt-4 flex items-center justify-between text-sm">
-          <span className="text-stone-500">
+          <span className="text-muted">
             Page {data.page} of {data.totalPages} · {data.totalCount} total
           </span>
           <div className="flex gap-2">

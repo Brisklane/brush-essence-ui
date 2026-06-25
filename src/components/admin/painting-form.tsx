@@ -205,14 +205,14 @@ export function PaintingForm({ painting }: { painting?: Painting }) {
       </FormSelect>
 
       <div className="flex flex-col gap-2">
-        <span className="text-ink text-sm font-medium">Image</span>
+        <span className="text-foreground text-sm font-medium">Image</span>
         {preview ? (
           <div className="relative h-40 w-40">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={preview}
               alt="Preview"
-              className="h-40 w-40 rounded-lg border border-stone-200 object-cover"
+              className="h-40 w-40 rounded-lg border border-border object-cover"
             />
             <button
               type="button"
@@ -223,7 +223,7 @@ export function PaintingForm({ painting }: { painting?: Painting }) {
             </button>
           </div>
         ) : (
-          <div className="flex h-40 w-40 items-center justify-center rounded-lg border border-dashed border-stone-300 text-xs text-stone-400">
+          <div className="flex h-40 w-40 items-center justify-center rounded-lg border border-dashed border-border text-xs text-muted-2">
             No image
           </div>
         )}
@@ -234,7 +234,7 @@ export function PaintingForm({ painting }: { painting?: Painting }) {
           className="text-sm"
         />
         {uploading ? (
-          <span className="text-sm text-stone-500">Uploading…</span>
+          <span className="text-sm text-muted">Uploading…</span>
         ) : null}
       </div>
 

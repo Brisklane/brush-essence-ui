@@ -97,14 +97,14 @@ export default function CategoriesPage() {
 
   return (
     <div className="p-6 sm:p-8">
-      <h1 className="text-ink text-2xl font-semibold">Categories</h1>
+      <h1 className="text-foreground text-2xl font-semibold">Categories</h1>
 
       <form
         onSubmit={handleAdd}
-        className="mt-6 flex max-w-2xl flex-col gap-3 rounded-xl border border-stone-200 bg-white p-4 sm:flex-row sm:items-end"
+        className="mt-6 flex max-w-2xl flex-col gap-3 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:items-end"
       >
         <div className="flex flex-1 flex-col gap-1.5">
-          <label htmlFor="cat-name" className="text-ink text-sm font-medium">
+          <label htmlFor="cat-name" className="text-foreground text-sm font-medium">
             Name
           </label>
           <Input
@@ -115,7 +115,7 @@ export default function CategoriesPage() {
           />
         </div>
         <div className="flex flex-1 flex-col gap-1.5">
-          <label htmlFor="cat-desc" className="text-ink text-sm font-medium">
+          <label htmlFor="cat-desc" className="text-foreground text-sm font-medium">
             Description (optional)
           </label>
           <Input
@@ -135,9 +135,9 @@ export default function CategoriesPage() {
         </p>
       ) : null}
 
-      <div className="mt-6 overflow-x-auto rounded-xl border border-stone-200 bg-white">
+      <div className="mt-6 overflow-x-auto rounded-xl border border-border bg-surface">
         <table className="w-full text-left text-sm">
-          <thead className="border-b border-stone-200 text-stone-500">
+          <thead className="border-b border-border text-muted">
             <tr>
               <th className="p-3 font-medium">Name</th>
               <th className="p-3 font-medium">Slug</th>
@@ -148,7 +148,7 @@ export default function CategoriesPage() {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={4} className="p-6 text-center text-stone-500">
+                <td colSpan={4} className="p-6 text-center text-muted">
                   Loading…
                 </td>
               </tr>
@@ -156,11 +156,11 @@ export default function CategoriesPage() {
               categories.map((category) => (
                 <tr
                   key={category.id}
-                  className="border-b border-stone-100 last:border-0"
+                  className="border-b border-border last:border-0"
                 >
-                  <td className="text-ink p-3 font-medium">{category.name}</td>
-                  <td className="p-3 text-stone-600">{category.slug}</td>
-                  <td className="p-3 text-stone-600">
+                  <td className="text-foreground p-3 font-medium">{category.name}</td>
+                  <td className="p-3 text-muted">{category.slug}</td>
+                  <td className="p-3 text-muted">
                     {category.description ?? "—"}
                   </td>
                   <td className="p-3 text-right">
@@ -176,7 +176,7 @@ export default function CategoriesPage() {
               ))
             ) : (
               <tr>
-                <td colSpan={4} className="p-6 text-center text-stone-500">
+                <td colSpan={4} className="p-6 text-center text-muted">
                   No categories yet.
                 </td>
               </tr>
