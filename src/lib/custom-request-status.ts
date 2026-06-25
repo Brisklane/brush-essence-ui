@@ -34,6 +34,18 @@ export const CUSTOM_REQUEST_PROGRESS_STEPS: CustomRequestStatus[] = [
   "Completed",
 ];
 
+/** Allowed next statuses, mirroring the API's CustomRequestStatusWorkflow. */
+export const CUSTOM_REQUEST_STATUS_TRANSITIONS: Record<
+  CustomRequestStatus,
+  CustomRequestStatus[]
+> = {
+  Submitted: ["Reviewed", "Declined"],
+  Reviewed: ["InProgress", "Declined"],
+  InProgress: ["Completed", "Declined"],
+  Completed: [],
+  Declined: [],
+};
+
 export function customRequestStatusBadgeVariant(
   status: CustomRequestStatus,
 ): NonNullable<BadgeProps["variant"]> {

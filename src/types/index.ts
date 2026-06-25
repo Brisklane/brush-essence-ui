@@ -155,6 +155,76 @@ export interface CustomRequestSummary {
   createdAt: string;
 }
 
+// ----- Admin dashboard -----
+
+export interface AdminUser {
+  id: string;
+  email: string;
+  fullName: string | null;
+  isActive: boolean;
+  isEmailVerified: boolean;
+  roles: string[];
+  lastLoginAt: string | null;
+  createdAt: string;
+}
+
+export interface AdminOrderListItem {
+  id: string;
+  orderNumber: string;
+  customerEmail: string;
+  status: OrderStatus;
+  currency: string;
+  total: number;
+  itemCount: number;
+  createdAt: string;
+}
+
+export interface AdminCustomRequestListItem {
+  id: string;
+  title: string;
+  customerEmail: string;
+  status: CustomRequestStatus;
+  imageCount: number;
+  createdAt: string;
+}
+
+export interface DashboardSummary {
+  totalRevenue: number;
+  currency: string;
+  totalOrders: number;
+  pendingOrders: number;
+  ordersByStatus: Record<string, number>;
+  totalUsers: number;
+  activeUsers: number;
+  newUsersLast30Days: number;
+  totalRequests: number;
+  openRequests: number;
+  requestsByStatus: Record<string, number>;
+  totalPaintings: number;
+  publishedPaintings: number;
+  outOfStockPaintings: number;
+  recentOrders: AdminOrderListItem[];
+  recentRequests: AdminCustomRequestListItem[];
+}
+
+export interface ReportPoint {
+  date: string;
+  revenue: number;
+  orders: number;
+  newUsers: number;
+  newRequests: number;
+}
+
+export interface Report {
+  days: number;
+  currency: string;
+  totalRevenue: number;
+  totalOrders: number;
+  totalNewUsers: number;
+  totalNewRequests: number;
+  points: ReportPoint[];
+}
+
 export interface PagedResult<T> {
   items: T[];
   totalCount: number;

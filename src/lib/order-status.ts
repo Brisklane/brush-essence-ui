@@ -30,6 +30,15 @@ export const ORDER_PROGRESS_STEPS: OrderStatus[] = [
   "Delivered",
 ];
 
+/** Allowed next statuses, mirroring the API's OrderStatusWorkflow. */
+export const ORDER_STATUS_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
+  Placed: ["Processing", "Cancelled"],
+  Processing: ["Shipped", "Cancelled"],
+  Shipped: ["Delivered", "Cancelled"],
+  Delivered: [],
+  Cancelled: [],
+};
+
 export function orderStatusBadgeVariant(
   status: OrderStatus,
 ): NonNullable<BadgeProps["variant"]> {
