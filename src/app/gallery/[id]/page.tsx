@@ -134,7 +134,10 @@ export default async function PaintingPage({ params }: PageProps) {
             </dl>
 
             <div className="mt-8">
-              <AddToCart stockQuantity={painting.stockQuantity} />
+              <AddToCart
+                paintingId={painting.id}
+                stockQuantity={painting.stockQuantity}
+              />
             </div>
           </div>
         </div>
