@@ -7,10 +7,15 @@ export const siteConfig = {
   tagline: "Hand-painted oil paintings on canvas",
   description:
     "Original, hand-painted oil paintings on canvas — each piece one of a kind. Browse the gallery and bring fine art home.",
+  /** Primary storefront navigation (kept to routes that actually exist). */
   nav: [
+    { label: "Home", href: "/" },
     { label: "Gallery", href: "/gallery" },
-    { label: "About", href: "/about" },
-    { label: "Contact", href: "/contact" },
+  ],
+  socials: [
+    { label: "Instagram", href: "https://instagram.com" },
+    { label: "Facebook", href: "https://facebook.com" },
+    { label: "Pinterest", href: "https://pinterest.com" },
   ],
 } as const;
 

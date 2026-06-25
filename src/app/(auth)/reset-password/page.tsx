@@ -9,10 +9,10 @@ export default function ResetPasswordPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-ink text-2xl font-semibold">
+        <h1 className="text-foreground text-2xl font-semibold">
           Choose a new password
         </h1>
-        <p className="mt-1 text-sm text-stone-600">
+        <p className="mt-1 text-sm text-muted">
           Enter and confirm your new password.
         </p>
       </div>

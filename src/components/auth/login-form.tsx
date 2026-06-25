@@ -76,7 +76,7 @@ export function LoginForm() {
         Forgot password?
       </Link>
 
-      <p className="text-center text-sm text-stone-600">
+      <p className="text-center text-sm text-muted">
         Don&apos;t have an account?{" "}
         <Link href="/register" className="text-brand-700 hover:text-brand-800">
           Create one

@@ -24,11 +24,11 @@ export default function EditPaintingPage() {
 
   return (
     <div className="p-6 sm:p-8">
-      <h1 className="text-ink text-2xl font-semibold">Edit painting</h1>
+      <h1 className="text-foreground text-2xl font-semibold">Edit painting</h1>
       {error ? (
         <p className="mt-4 text-red-700">{error}</p>
       ) : !painting ? (
-        <p className="mt-4 text-stone-600">Loading…</p>
+        <p className="mt-4 text-muted">Loading…</p>
       ) : (
         <div className="mt-6">
           <PaintingForm painting={painting} />

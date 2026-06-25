@@ -1,12 +1,14 @@
 @import "tailwindcss";
 
 /*
- * Tailwind v4 is configured CSS-first: design tokens live here in `@theme`
- * (no tailwind.config.js needed). Tokens below generate utilities such as
- * `bg-brand-600`, `text-canvas`, etc.
+ * Class-based dark mode. Tailwind v4 is configured CSS-first (no config file),
+ * so we register a `dark:` variant that activates whenever a `.dark` class is
+ * present on an ancestor. `ThemeProvider` toggles `.dark` on <html>.
  */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
-  /* Brand palette — warm, gallery-inspired tones for an oil-painting store. */
+  /* Brand palette — warm, gallery terracotta used for primary actions. */
   --color-brand-50: #fdf6f0;
   --color-brand-100: #f8e6d6;
   --color-brand-200: #f0c9a8;
@@ -18,32 +20,70 @@
   --color-brand-800: #6f381c;
   --color-brand-900: #5a2f1a;
 
-  /* Semantic surface colors. */
-  --color-canvas: #faf8f5;
-  --color-ink: #1c1917;
+  /* Gold accent — refined gallery detail (rules, underlines, highlights). */
+  --color-gold-300: #e4c989;
+  --color-gold-400: #d4af6a;
+  --color-gold-500: #c19a4f;
+  --color-gold-600: #a47f38;
+
+  --font-display: var(--font-display), Georgia, "Times New Roman", serif;
 }
 
+/*
+ * Semantic, theme-aware tokens. Components reference these (bg-surface,
+ * text-foreground, border-border, …) so a single class flip restyles the
+ * whole app between light and dark.
+ */
 :root {
-  --background: #faf8f5;
-  --foreground: #1c1917;
+  --background: #faf8f5; /* page */
+  --surface: #ffffff; /* cards, header, inputs */
+  --surface-2: #f3ede4; /* muted panels / hover */
+  --foreground: #1f1b17; /* primary text */
+  --muted: #6b6258; /* secondary text */
+  --muted-2: #8a8076; /* tertiary text */
+  --border: #e7dfd3;
+  --ring: var(--color-brand-500);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #14110f;
-    --foreground: #f5f1ec;
-  }
+.dark {
+  --background: #0e1621; /* deep navy gallery wall */
+  --surface: #16212f;
+  --surface-2: #1d2a3a;
+  --foreground: #f3efe9;
+  --muted: #a9b6c4;
+  --muted-2: #7e8b99;
+  --border: #2a3849;
+  --ring: var(--color-gold-400);
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-2: var(--muted-2);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+}
+
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  /* Smooth the flip between themes without animating page loads. */
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }

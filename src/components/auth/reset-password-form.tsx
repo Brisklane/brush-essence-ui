@@ -65,7 +65,7 @@ export function ResetPasswordForm() {
 
   if (succeeded) {
     return (
-      <div className="flex flex-col gap-4 text-sm text-stone-600">
+      <div className="flex flex-col gap-4 text-sm text-muted">
         <p>
           Your password has been reset. You can now sign in with your new
           password.

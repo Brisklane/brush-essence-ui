@@ -2,8 +2,6 @@
 
 import { useEffect } from "react";
 
-import { cn } from "@/lib/utils";
-
 import { Button } from "./button";
 
 interface ConfirmDialogProps {
@@ -59,25 +57,25 @@ export function ConfirmDialog({
         role="dialog"
         aria-modal="true"
         aria-labelledby="confirm-dialog-title"
-        className="relative w-full max-w-md rounded-xl border border-stone-200 bg-white p-6 shadow-lg"
+        className="border-border bg-surface relative w-full max-w-md rounded-xl border p-6 shadow-xl"
       >
         <h2
           id="confirm-dialog-title"
-          className="text-ink text-lg font-semibold"
+          className="text-foreground text-lg font-semibold"
         >
           {title}
         </h2>
         {description ? (
-          <p className="mt-2 text-sm text-stone-600">{description}</p>
+          <p className="text-muted mt-2 text-sm">{description}</p>
         ) : null}
         <div className="mt-6 flex justify-end gap-3">
           <Button variant="outline" onClick={onCancel} disabled={loading}>
             {cancelLabel}
           </Button>
           <Button
+            variant={destructive ? "danger" : "primary"}
             onClick={onConfirm}
             disabled={loading}
-            className={cn(destructive && "bg-red-600 hover:bg-red-700")}
           >
             {loading ? "Working…" : confirmLabel}
           </Button>

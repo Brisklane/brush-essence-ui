@@ -3,8 +3,8 @@ import { forwardRef, type ComponentPropsWithoutRef } from "react";
 import { Input, Select, Textarea } from "@/components/ui";
 import { cn } from "@/lib/utils";
 
-const labelClass = "text-ink text-sm font-medium";
-const errorClass = "text-sm text-red-600";
+const labelClass = "text-foreground text-sm font-medium";
+const errorClass = "text-sm text-red-600 dark:text-red-400";
 
 interface FieldProps {
   label: string;
@@ -82,13 +82,16 @@ export const FormCheckbox = forwardRef<
   Omit<ComponentPropsWithoutRef<"input">, "type"> & { label: string }
 >(function FormCheckbox({ label, id, className, ...props }, ref) {
   return (
-    <label htmlFor={id} className="text-ink flex items-center gap-2 text-sm">
+    <label
+      htmlFor={id}
+      className="text-foreground flex items-center gap-2 text-sm"
+    >
       <input
         id={id}
         ref={ref}
         type="checkbox"
         className={cn(
-          "accent-brand-600 h-4 w-4 rounded border-stone-300",
+          "accent-brand-600 border-border h-4 w-4 rounded",
           className,
         )}
         {...props}

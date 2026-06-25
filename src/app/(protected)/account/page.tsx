@@ -25,32 +25,32 @@ export default function AccountPage() {
   if (status !== "authenticated" || !user) {
     return (
       <Container className="py-16">
-        <p className="text-stone-600">Loading…</p>
+        <p className="text-muted">Loading…</p>
       </Container>
     );
   }
 
   return (
     <Container className="py-16">
-      <div className="mx-auto max-w-xl rounded-xl border border-stone-200 bg-white p-8 shadow-sm">
-        <h1 className="text-ink text-2xl font-semibold">Your account</h1>
+      <div className="mx-auto max-w-xl rounded-xl border border-border bg-surface p-8 shadow-sm">
+        <h1 className="text-foreground text-2xl font-semibold">Your account</h1>
 
         <dl className="mt-6 space-y-3 text-sm">
           <div className="flex justify-between gap-4">
-            <dt className="text-stone-500">Email</dt>
-            <dd className="text-ink">{user.email}</dd>
+            <dt className="text-muted">Email</dt>
+            <dd className="text-foreground">{user.email}</dd>
           </div>
           <div className="flex justify-between gap-4">
-            <dt className="text-stone-500">Name</dt>
-            <dd className="text-ink">{user.fullName ?? "—"}</dd>
+            <dt className="text-muted">Name</dt>
+            <dd className="text-foreground">{user.fullName ?? "—"}</dd>
           </div>
           <div className="flex justify-between gap-4">
-            <dt className="text-stone-500">Roles</dt>
-            <dd className="text-ink">{user.roles.join(", ") || "—"}</dd>
+            <dt className="text-muted">Roles</dt>
+            <dd className="text-foreground">{user.roles.join(", ") || "—"}</dd>
           </div>
           <div className="flex justify-between gap-4">
-            <dt className="text-stone-500">Email verified</dt>
-            <dd className="text-ink">{user.isEmailVerified ? "Yes" : "No"}</dd>
+            <dt className="text-muted">Email verified</dt>
+            <dd className="text-foreground">{user.isEmailVerified ? "Yes" : "No"}</dd>
           </div>
         </dl>
 

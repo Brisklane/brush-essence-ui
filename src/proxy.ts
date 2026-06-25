@@ -21,6 +21,8 @@ export function proxy(request: NextRequest) {
   return NextResponse.next();
 }
 
+// The storefront (home, gallery, product details) is public; only the user's
+// account area and the admin dashboard require a session.
 export const config = {
-  matcher: ["/", "/account/:path*", "/admin/:path*"],
+  matcher: ["/account/:path*", "/admin/:path*"],
 };
