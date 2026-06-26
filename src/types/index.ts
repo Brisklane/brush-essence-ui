@@ -16,6 +16,8 @@ export interface Painting {
   isPublished: boolean;
   categoryId: string | null;
   categoryName: string | null;
+  averageRating: number;
+  ratingCount: number;
   createdAt: string;
 }
 
@@ -223,6 +225,38 @@ export interface Report {
   totalNewUsers: number;
   totalNewRequests: number;
   points: ReportPoint[];
+}
+
+export type ReviewStatus = "Pending" | "Approved" | "Rejected";
+
+export interface Review {
+  id: string;
+  paintingId: string;
+  authorName: string;
+  rating: number;
+  title: string | null;
+  comment: string | null;
+  status: ReviewStatus;
+  createdAt: string;
+}
+
+export interface ReviewSummary {
+  average: number;
+  count: number;
+  /** Count of approved reviews per star (keys "1".."5"). */
+  distribution: Record<string, number>;
+}
+
+export interface AdminReviewListItem {
+  id: string;
+  paintingId: string;
+  paintingTitle: string;
+  customerEmail: string;
+  rating: number;
+  title: string | null;
+  comment: string | null;
+  status: ReviewStatus;
+  createdAt: string;
 }
 
 export interface PagedResult<T> {

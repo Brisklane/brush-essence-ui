@@ -4,6 +4,7 @@ import { apiFetch } from "@/lib/api-client";
 import type {
   AdminCustomRequestListItem,
   AdminOrderListItem,
+  AdminReviewListItem,
   AdminUser,
   CustomRequest,
   CustomRequestStatus,
@@ -12,6 +13,7 @@ import type {
   OrderStatus,
   PagedResult,
   Report,
+  ReviewStatus,
 } from "@/types";
 
 /** Admin dashboard API. All endpoints require the Admin role (enforced server-side). */
@@ -152,4 +154,54 @@ export async function updateRequestStatus(
       body: JSON.stringify({ status, note: note ?? null }),
     }),
   );
+}
+
+// ----- Reviews -----
+
+export interface AdminReviewListParams {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  status?: ReviewStatus;
+}
+
+export async function listAdminReviews(
+  params: AdminReviewListParams = {},
+): Promise<PagedResult<AdminReviewListItem>> {
+  return parse(await apiFetch(`/api/admin/reviews${buildQuery({ ...params })}`));
+}
+
+export async function updateReviewStatus(
+  id: string,
+  status: ReviewStatus,
+): Promise<AdminReviewListItem> {
+  return parse(
+    await apiFetch(`/api/admin/reviews/${id}/status`, {
+      method: "PUT",
+      headers: jsonHeaders,
+      body: JSON.stringify({ status }),
+    }),
+  );
+}
+
+export async function updateReview(
+  id: string,
+  payload: { rating: number; title?: string | null; comment?: string | null },
+): Promise<AdminReviewListItem> {
+  return parse(
+    await apiFetch(`/api/admin/reviews/${id}`, {
+      method: "PUT",
+      headers: jsonHeaders,
+      body: JSON.stringify(payload),
+    }),
+  );
+}
+
+export async function deleteReview(id: string): Promise<void> {
+  const response = await apiFetch(`/api/admin/reviews/${id}`, {
+    method: "DELETE",
+  });
+  if (!response.ok) {
+    throw new Error(`Request failed (${response.status}).`);
+  }
 }

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 
 import { AddToCart, ProductCard } from "@/components/catalog";
 import { Container } from "@/components/layout";
+import { ReviewsSection, StarRating } from "@/components/reviews";
 import { Badge, formatPrice } from "@/components/ui";
 import { resolveImageUrl } from "@/lib/image";
 import { fetchCatalog, fetchPainting } from "@/lib/storefront";
@@ -106,6 +107,16 @@ export default async function PaintingPage({ params }: PageProps) {
               {painting.title}
             </h1>
 
+            {painting.ratingCount > 0 ? (
+              <div className="mt-3 flex items-center gap-2">
+                <StarRating value={painting.averageRating} size="sm" />
+                <span className="text-muted text-sm">
+                  {painting.averageRating.toFixed(1)} · {painting.ratingCount}{" "}
+                  {painting.ratingCount === 1 ? "review" : "reviews"}
+                </span>
+              </div>
+            ) : null}
+
             <p className="text-foreground mt-3 text-2xl font-semibold">
               {formatPrice(painting.price, painting.currency)}
             </p>
@@ -141,6 +152,9 @@ export default async function PaintingPage({ params }: PageProps) {
             </div>
           </div>
         </div>
+
+        {/* Reviews */}
+        <ReviewsSection paintingId={painting.id} />
 
         {/* Related */}
         {related.length > 0 ? (
