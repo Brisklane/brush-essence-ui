@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { StarRating } from "@/components/reviews";
 import { Badge, buttonVariants, formatPrice } from "@/components/ui";
 import { resolveImageUrl } from "@/lib/image";
 import { cn } from "@/lib/utils";
@@ -54,6 +55,13 @@ export function ProductCard({ painting }: { painting: Painting }) {
         <p className="text-muted mt-0.5 line-clamp-1 text-sm">
           {painting.medium ?? "Oil on canvas"}
         </p>
+
+        {painting.ratingCount > 0 ? (
+          <div className="mt-1.5 flex items-center gap-1.5">
+            <StarRating value={painting.averageRating} size="sm" />
+            <span className="text-muted-2 text-xs">({painting.ratingCount})</span>
+          </div>
+        ) : null}
 
         <div className="mt-3 flex items-center justify-between gap-2">
           <span className="text-foreground text-lg font-semibold">
