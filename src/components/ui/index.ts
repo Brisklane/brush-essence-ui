@@ -9,3 +9,4 @@ export * from "./theme-toggle";
 export * from "./badge";
 export * from "./price";
 export * from "./spinner";
+export * from "./skeleton";

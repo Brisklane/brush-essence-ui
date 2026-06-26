@@ -6,6 +6,7 @@ import { AddToCart, ProductCard } from "@/components/catalog";
 import { Container } from "@/components/layout";
 import { ReviewsSection, StarRating } from "@/components/reviews";
 import { Badge, formatPrice } from "@/components/ui";
+import { env } from "@/lib/env";
 import { resolveImageUrl } from "@/lib/image";
 import { fetchCatalog, fetchPainting } from "@/lib/storefront";
 import type { Painting } from "@/types";
@@ -55,8 +56,41 @@ export default async function PaintingPage({ params }: PageProps) {
   const soldOut = painting.stockQuantity <= 0;
   const related = await getRelated(painting);
 
+  // Product structured data (schema.org) for rich search results.
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: painting.title,
+    description:
+      painting.description ??
+      `${painting.title} — an original hand-painted oil on canvas.`,
+    image: image ? [image] : undefined,
+    category: painting.categoryName ?? undefined,
+    offers: {
+      "@type": "Offer",
+      price: painting.price,
+      priceCurrency: painting.currency,
+      availability: soldOut
+        ? "https://schema.org/OutOfStock"
+        : "https://schema.org/InStock",
+      url: `${env.NEXT_PUBLIC_SITE_URL}/gallery/${painting.id}`,
+    },
+    aggregateRating:
+      painting.ratingCount > 0
+        ? {
+            "@type": "AggregateRating",
+            ratingValue: painting.averageRating,
+            reviewCount: painting.ratingCount,
+          }
+        : undefined,
+  };
+
   return (
     <div className="py-8 sm:py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Container>
         {/* Breadcrumb */}
         <nav className="text-muted mb-6 flex items-center gap-2 text-sm">
@@ -80,6 +114,8 @@ export default async function PaintingPage({ params }: PageProps) {
                 <img
                   src={image}
                   alt={painting.title}
+                  decoding="async"
+                  fetchPriority="high"
                   className="max-h-[32rem] w-full rounded-md object-contain shadow-lg"
                 />
               ) : (
