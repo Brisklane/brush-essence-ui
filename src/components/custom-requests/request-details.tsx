@@ -3,12 +3,12 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import { Button, buttonVariants, formatPrice, Spinner } from "@/components/ui";
 import {
-  buttonVariants,
-  formatPrice,
-  Spinner,
-} from "@/components/ui";
-import { getCustomRequest } from "@/lib/custom-requests-api";
+  approveQuote,
+  declineQuote,
+  getCustomRequest,
+} from "@/lib/custom-requests-api";
 import { resolveImageUrl } from "@/lib/image";
 import { cn } from "@/lib/utils";
 import type { CustomRequest } from "@/types";
@@ -25,6 +25,8 @@ function formatDate(iso: string): string {
 export function RequestDetails({ requestId }: { requestId: string }) {
   const [request, setRequest] = useState<CustomRequest | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [acting, setActing] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -43,6 +45,24 @@ export function RequestDetails({ requestId }: { requestId: string }) {
       cancelled = true;
     };
   }, [requestId]);
+
+  async function respondToQuote(decision: "approve" | "decline") {
+    setActing(true);
+    setActionError(null);
+    try {
+      const updated =
+        decision === "approve"
+          ? await approveQuote(requestId)
+          : await declineQuote(requestId);
+      setRequest(updated);
+    } catch (err) {
+      setActionError(
+        err instanceof Error ? err.message : "Something went wrong.",
+      );
+    } finally {
+      setActing(false);
+    }
+  }
 
   if (error) {
     return (
@@ -68,10 +88,7 @@ export function RequestDetails({ requestId }: { requestId: string }) {
 
   return (
     <div>
-      <Link
-        href="/custom-requests"
-        className="text-muted hover:text-foreground text-sm"
-      >
+      <Link href="/custom-requests" className="text-muted hover:text-foreground text-sm">
         ← Your custom requests
       </Link>
 
@@ -97,6 +114,40 @@ export function RequestDetails({ requestId }: { requestId: string }) {
         </div>
       </div>
 
+      {/* Pending quote — needs the customer's decision */}
+      {request.status === "Quoted" && request.quoteAmount != null ? (
+        <section className="border-gold-300 bg-gold-50 dark:border-gold-500/30 dark:bg-gold-500/10 mt-6 rounded-xl border p-6">
+          <h2 className="text-foreground text-lg font-semibold">
+            Your quote is ready
+          </h2>
+          <p className="text-foreground mt-2 text-3xl font-semibold">
+            {formatPrice(request.quoteAmount, request.currency)}
+          </p>
+          <p className="text-muted mt-1 text-sm">
+            Approve to get your commission started, or decline if you&apos;d
+            prefer not to go ahead.
+          </p>
+          {actionError ? (
+            <p className="mt-3 text-sm text-red-600">{actionError}</p>
+          ) : null}
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Button
+              onClick={() => respondToQuote("approve")}
+              disabled={acting}
+            >
+              {acting ? "Working…" : "Approve quote"}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => respondToQuote("decline")}
+              disabled={acting}
+            >
+              Decline
+            </Button>
+          </div>
+        </section>
+      ) : null}
+
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_20rem]">
         <div className="space-y-8">
           <section className="border-border bg-surface rounded-xl border p-6 shadow-sm">
@@ -109,9 +160,7 @@ export function RequestDetails({ requestId }: { requestId: string }) {
           </section>
 
           <section className="border-border bg-surface rounded-xl border p-6 shadow-sm">
-            <h2 className="text-foreground text-lg font-semibold">
-              Your brief
-            </h2>
+            <h2 className="text-foreground text-lg font-semibold">Your brief</h2>
             <p className="text-muted mt-3 leading-relaxed whitespace-pre-line">
               {request.description}
             </p>
@@ -147,7 +196,7 @@ export function RequestDetails({ requestId }: { requestId: string }) {
           </section>
         </div>
 
-        <aside className="border-border bg-surface h-fit space-y-3 rounded-xl border p-6 shadow-sm text-sm">
+        <aside className="border-border bg-surface h-fit space-y-3 rounded-xl border p-6 text-sm shadow-sm">
           <h2 className="text-foreground text-sm font-semibold tracking-wide uppercase">
             Details
           </h2>
@@ -158,10 +207,10 @@ export function RequestDetails({ requestId }: { requestId: string }) {
             </dd>
           </div>
           <div className="flex justify-between gap-4">
-            <dt className="text-muted">Budget</dt>
+            <dt className="text-muted">Quote</dt>
             <dd className="text-foreground text-right">
-              {request.budgetAmount != null
-                ? formatPrice(request.budgetAmount, request.currency)
+              {request.quoteAmount != null
+                ? formatPrice(request.quoteAmount, request.currency)
                 : "—"}
             </dd>
           </div>

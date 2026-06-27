@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { FormField, FormSelect, FormTextarea } from "@/components/forms";
+import { FormField, FormTextarea } from "@/components/forms";
 import { Button } from "@/components/ui";
 import type { CustomRequestPayload } from "@/lib/custom-requests-api";
 import {
@@ -13,8 +13,6 @@ import {
 } from "@/lib/validations/custom-request";
 
 import { ImageUpload, type UploadedImage } from "./image-upload";
-
-const CURRENCIES = ["USD", "EUR", "GBP", "PKR"] as const;
 
 interface CustomRequestFormProps {
   onSubmit: (payload: CustomRequestPayload) => void | Promise<void>;
@@ -46,20 +44,14 @@ export function CustomRequestForm({
     formState: { errors },
   } = useForm<CustomRequestValues>({
     resolver: zodResolver(customRequestSchema),
-    defaultValues: { currency: "USD", ...defaultValues },
+    defaultValues,
   });
 
   function submit(values: CustomRequestValues) {
-    const budget = values.budgetAmount?.trim()
-      ? Number(values.budgetAmount)
-      : null;
-
     return onSubmit({
       title: values.title,
       description: values.description,
       preferredSize: values.preferredSize?.trim() || null,
-      budgetAmount: budget,
-      currency: values.currency,
       images: images.map((image) => ({
         url: image.url,
         fileName: image.fileName,
@@ -103,31 +95,6 @@ export function CustomRequestForm({
         error={errors.preferredSize?.message}
         {...register("preferredSize")}
       />
-
-      <div className="grid gap-4 sm:grid-cols-[1fr_8rem]">
-        <FormField
-          id="budgetAmount"
-          label="Budget (optional)"
-          type="number"
-          min="0"
-          step="1"
-          placeholder="e.g. 500"
-          error={errors.budgetAmount?.message}
-          {...register("budgetAmount")}
-        />
-        <FormSelect
-          id="currency"
-          label="Currency"
-          error={errors.currency?.message}
-          {...register("currency")}
-        >
-          {CURRENCIES.map((code) => (
-            <option key={code} value={code}>
-              {code}
-            </option>
-          ))}
-        </FormSelect>
-      </div>
 
       <div>
         <span className="text-foreground text-sm font-medium">

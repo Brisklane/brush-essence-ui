@@ -5,10 +5,11 @@ import { notFound } from "next/navigation";
 import { AddToCart, ProductCard } from "@/components/catalog";
 import { Container } from "@/components/layout";
 import { ReviewsSection, StarRating } from "@/components/reviews";
-import { Badge, formatPrice } from "@/components/ui";
+import { Badge, PriceTag } from "@/components/ui";
 import { env } from "@/lib/env";
 import { resolveImageUrl } from "@/lib/image";
 import { fetchCatalog, fetchPainting } from "@/lib/storefront";
+import { formatDimensions } from "@/lib/units";
 import type { Painting } from "@/types";
 
 type PageProps = { params: Promise<{ id: string }> };
@@ -68,7 +69,7 @@ export default async function PaintingPage({ params }: PageProps) {
     category: painting.categoryName ?? undefined,
     offers: {
       "@type": "Offer",
-      price: painting.price,
+      price: painting.discountedPrice ?? painting.price,
       priceCurrency: painting.currency,
       availability: soldOut
         ? "https://schema.org/OutOfStock"
@@ -153,9 +154,12 @@ export default async function PaintingPage({ params }: PageProps) {
               </div>
             ) : null}
 
-            <p className="text-foreground mt-3 text-2xl font-semibold">
-              {formatPrice(painting.price, painting.currency)}
-            </p>
+            <PriceTag
+              price={painting.price}
+              discountedPrice={painting.discountedPrice}
+              currency={painting.currency}
+              className="mt-3 text-2xl"
+            />
 
             <div className="border-border my-6 border-t" />
 
@@ -168,12 +172,11 @@ export default async function PaintingPage({ params }: PageProps) {
             )}
 
             <dl className="mt-6 grid grid-cols-2 gap-4 text-sm">
-              <Spec label="Medium" value={painting.medium ?? "Oil on canvas"} />
+              <Spec label="Medium" value={painting.mediumName ?? "Oil on canvas"} />
               <Spec
                 label="Dimensions"
-                value={`${painting.widthCm} × ${painting.heightCm} cm`}
+                value={formatDimensions(painting.widthCm, painting.heightCm)}
               />
-              <Spec label="Currency" value={painting.currency} />
               <Spec
                 label="Availability"
                 value={soldOut ? "Sold out" : `${painting.stockQuantity} in stock`}

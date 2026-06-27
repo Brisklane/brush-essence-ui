@@ -4,7 +4,11 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { Button, buttonVariants, ConfirmDialog, Input } from "@/components/ui";
-import { deletePainting, listPaintings } from "@/lib/catalog-api";
+import {
+  deletePainting,
+  listPaintings,
+  updatePainting,
+} from "@/lib/catalog-api";
 import { resolveImageUrl } from "@/lib/image";
 import { cn } from "@/lib/utils";
 import type { PagedResult, Painting } from "@/types";
@@ -22,6 +26,7 @@ export default function PaintingsListPage() {
 
   const [deleteTarget, setDeleteTarget] = useState<Painting | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [togglingId, setTogglingId] = useState<string | null>(null);
 
   // State updates happen only in async callbacks, never synchronously in the effect.
   useEffect(() => {
@@ -62,6 +67,43 @@ export default function PaintingsListPage() {
   function goToPage(next: number) {
     setLoading(true);
     setPage(next);
+  }
+
+  async function togglePublish(painting: Painting) {
+    setTogglingId(painting.id);
+    setError(null);
+    try {
+      await updatePainting(painting.id, {
+        title: painting.title,
+        description: painting.description,
+        price: painting.price,
+        widthCm: painting.widthCm,
+        heightCm: painting.heightCm,
+        mediumId: painting.mediumId,
+        imageUrl: painting.imageUrl,
+        stockQuantity: painting.stockQuantity,
+        isPublished: !painting.isPublished,
+        categoryId: painting.categoryId,
+      });
+      setData((current) =>
+        current
+          ? {
+              ...current,
+              items: current.items.map((item) =>
+                item.id === painting.id
+                  ? { ...item, isPublished: !item.isPublished }
+                  : item,
+              ),
+            }
+          : current,
+      );
+    } catch (caught) {
+      setError(
+        caught instanceof Error ? caught.message : "Failed to update painting.",
+      );
+    } finally {
+      setTogglingId(null);
+    }
   }
 
   async function confirmDelete() {
@@ -111,7 +153,7 @@ export default function PaintingsListPage() {
       ) : null}
 
       <div className="mt-6 overflow-x-auto rounded-xl border border-border bg-surface">
-        <table className="w-full text-left text-sm">
+        <table className="w-full min-w-176 text-left text-sm">
           <thead className="border-b border-border text-muted">
             <tr>
               <th className="p-3 font-medium">Image</th>
@@ -172,6 +214,18 @@ export default function PaintingsListPage() {
                     </td>
                     <td className="p-3 text-right">
                       <div className="flex justify-end gap-3">
+                        <button
+                          type="button"
+                          onClick={() => togglePublish(painting)}
+                          disabled={togglingId === painting.id}
+                          className="text-foreground hover:text-brand-700 font-medium disabled:opacity-50"
+                        >
+                          {togglingId === painting.id
+                            ? "…"
+                            : painting.isPublished
+                              ? "Unpublish"
+                              : "Publish"}
+                        </button>
                         <Link
                           href={`/admin/paintings/${painting.id}/edit`}
                           className="text-brand-700 hover:text-brand-800 font-medium"

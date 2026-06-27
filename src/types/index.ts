@@ -7,10 +7,13 @@ export interface Painting {
   title: string;
   description: string | null;
   price: number;
+  /** Sale price when a promotion applies; null at full price. */
+  discountedPrice: number | null;
   currency: string;
   widthCm: number;
   heightCm: number;
-  medium: string | null;
+  mediumId: string | null;
+  mediumName: string | null;
   imageUrl: string | null;
   stockQuantity: number;
   isPublished: boolean;
@@ -26,6 +29,12 @@ export interface Category {
   name: string;
   slug: string;
   description: string | null;
+  createdAt: string;
+}
+
+export interface Medium {
+  id: string;
+  name: string;
   createdAt: string;
 }
 
@@ -118,6 +127,7 @@ export interface OrderTracking {
 export type CustomRequestStatus =
   | "Submitted"
   | "Reviewed"
+  | "Quoted"
   | "InProgress"
   | "Completed"
   | "Declined";
@@ -140,7 +150,7 @@ export interface CustomRequest {
   title: string;
   description: string;
   preferredSize: string | null;
-  budgetAmount: number | null;
+  quoteAmount: number | null;
   currency: string;
   status: CustomRequestStatus;
   isEditable: boolean;
@@ -257,6 +267,41 @@ export interface AdminReviewListItem {
   comment: string | null;
   status: ReviewStatus;
   createdAt: string;
+}
+
+// ----- Promotions / discounts -----
+
+export type DiscountType = "Percentage" | "FixedAmount";
+
+export type PromotionScope = "All" | "Category" | "Paintings";
+
+export interface Promotion {
+  id: string;
+  name: string;
+  discountType: DiscountType;
+  value: number;
+  scope: PromotionScope;
+  categoryId: string | null;
+  categoryName: string | null;
+  paintingIds: string[];
+  isActive: boolean;
+  startsAt: string | null;
+  endsAt: string | null;
+  /** True when currently active and within its date window. */
+  isLive: boolean;
+  createdAt: string;
+}
+
+export interface SavePromotionPayload {
+  name: string;
+  discountType: DiscountType;
+  value: number;
+  scope: PromotionScope;
+  categoryId?: string | null;
+  paintingIds: string[];
+  isActive: boolean;
+  startsAt?: string | null;
+  endsAt?: string | null;
 }
 
 export interface PagedResult<T> {

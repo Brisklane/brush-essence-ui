@@ -32,8 +32,6 @@ export interface CustomRequestPayload {
   title: string;
   description: string;
   preferredSize?: string | null;
-  budgetAmount?: number | null;
-  currency: string;
   images: CustomRequestImagePayload[];
 }
 
@@ -68,6 +66,24 @@ export async function listCustomRequests(): Promise<CustomRequestSummary[]> {
 
 export async function getCustomRequest(id: string): Promise<CustomRequest> {
   return parse(await apiFetch(`/api/custom-requests/${id}`));
+}
+
+/** Customer accepts the artist's quote (moves the request to In progress). */
+export async function approveQuote(id: string): Promise<CustomRequest> {
+  return parse(
+    await apiFetch(`/api/custom-requests/${id}/approve-quote`, {
+      method: "POST",
+    }),
+  );
+}
+
+/** Customer declines the artist's quote. */
+export async function declineQuote(id: string): Promise<CustomRequest> {
+  return parse(
+    await apiFetch(`/api/custom-requests/${id}/decline-quote`, {
+      method: "POST",
+    }),
+  );
 }
 
 /** Uploads a reference image and returns its stored public URL. */

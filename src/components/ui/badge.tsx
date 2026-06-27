@@ -4,15 +4,20 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center gap-1 rounded-full text-xs font-medium tracking-wide",
+  "inline-flex items-center gap-1 rounded-full text-xs font-medium tracking-wide ring-1 ring-inset",
   {
     variants: {
       variant: {
-        neutral: "bg-surface-2 text-muted",
-        brand: "bg-brand-50 text-brand-700 dark:bg-brand-900/40 dark:text-brand-200",
-        gold: "bg-gold-500/15 text-gold-600 dark:text-gold-300",
-        success: "bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300",
-        danger: "bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-300",
+        neutral: "bg-surface-2 text-muted ring-border",
+        brand:
+          "bg-brand-50 text-brand-700 ring-brand-200 dark:bg-brand-900/40 dark:text-brand-200 dark:ring-brand-800",
+        gold: "bg-gold-100 text-gold-700 ring-gold-300/60 dark:bg-gold-500/15 dark:text-gold-300 dark:ring-gold-500/30",
+        success:
+          "bg-success-50 text-success-700 ring-success-300/60 dark:bg-success-500/15 dark:text-success-300 dark:ring-success-500/30",
+        warning:
+          "bg-warning-50 text-warning-700 ring-warning-300/60 dark:bg-warning-500/15 dark:text-warning-300 dark:ring-warning-500/30",
+        danger:
+          "bg-danger-50 text-danger-700 ring-danger-300/60 dark:bg-danger-500/15 dark:text-danger-300 dark:ring-danger-500/30",
       },
       size: {
         sm: "px-2 py-0.5",

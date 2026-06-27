@@ -12,8 +12,10 @@ import type {
   Order,
   OrderStatus,
   PagedResult,
+  Promotion,
   Report,
   ReviewStatus,
+  SavePromotionPayload,
 } from "@/types";
 
 /** Admin dashboard API. All endpoints require the Admin role (enforced server-side). */
@@ -156,6 +158,21 @@ export async function updateRequestStatus(
   );
 }
 
+/** Admin: send the customer a price quote (moves the request to Quoted). */
+export async function setRequestQuote(
+  id: string,
+  amount: number,
+  note?: string,
+): Promise<CustomRequest> {
+  return parse(
+    await apiFetch(`/api/admin/custom-requests/${id}/quote`, {
+      method: "PUT",
+      headers: jsonHeaders,
+      body: JSON.stringify({ amount, note: note ?? null }),
+    }),
+  );
+}
+
 // ----- Reviews -----
 
 export interface AdminReviewListParams {
@@ -199,6 +216,46 @@ export async function updateReview(
 
 export async function deleteReview(id: string): Promise<void> {
   const response = await apiFetch(`/api/admin/reviews/${id}`, {
+    method: "DELETE",
+  });
+  if (!response.ok) {
+    throw new Error(`Request failed (${response.status}).`);
+  }
+}
+
+// ----- Promotions / discounts -----
+
+export async function listPromotions(): Promise<Promotion[]> {
+  return parse(await apiFetch("/api/admin/promotions"));
+}
+
+export async function createPromotion(
+  payload: SavePromotionPayload,
+): Promise<Promotion> {
+  return parse(
+    await apiFetch("/api/admin/promotions", {
+      method: "POST",
+      headers: jsonHeaders,
+      body: JSON.stringify(payload),
+    }),
+  );
+}
+
+export async function updatePromotion(
+  id: string,
+  payload: SavePromotionPayload,
+): Promise<Promotion> {
+  return parse(
+    await apiFetch(`/api/admin/promotions/${id}`, {
+      method: "PUT",
+      headers: jsonHeaders,
+      body: JSON.stringify(payload),
+    }),
+  );
+}
+
+export async function deletePromotion(id: string): Promise<void> {
+  const response = await apiFetch(`/api/admin/promotions/${id}`, {
     method: "DELETE",
   });
   if (!response.ok) {

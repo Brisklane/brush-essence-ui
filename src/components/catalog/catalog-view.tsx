@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
   Button,
@@ -181,7 +181,6 @@ export function CatalogView() {
         {/* Toolbar */}
         <div className="border-border bg-surface mb-6 flex flex-col gap-3 rounded-xl border p-3 sm:flex-row sm:items-center sm:justify-between">
           <SearchBox
-            key={state.search}
             initial={state.search}
             onSearch={(value) => commit({ search: value })}
           />
@@ -290,9 +289,10 @@ export function CatalogView() {
 }
 
 /**
- * Uncontrolled search field. Remounting (via `key={search}` in the parent)
- * re-seeds it when the URL changes externally, so it needs no effect-based
- * synchronisation. Commits on submit (Enter) and on blur.
+ * Search-as-you-type field. Typing updates the input instantly and commits the
+ * query after a short debounce, so results feel immediate. External changes to
+ * the committed search (e.g. "Clear filters" or a header search) are adopted
+ * without clobbering in-progress typing.
  */
 function SearchBox({
   initial,
@@ -301,27 +301,39 @@ function SearchBox({
   initial: string;
   onSearch: (value: string) => void;
 }) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Sync the field with external changes (Clear filters / header search) without
+  // ever overwriting what the user is actively typing.
+  useEffect(() => {
+    const el = inputRef.current;
+    if (el && document.activeElement !== el && el.value !== initial) {
+      el.value = initial;
+    }
+  }, [initial]);
+
   return (
     <form
       className="relative flex-1 sm:max-w-xs"
       onSubmit={(e) => {
         e.preventDefault();
-        const input = e.currentTarget.elements.namedItem(
-          "search",
-        ) as HTMLInputElement;
-        onSearch(input.value.trim());
+        if (timerRef.current) clearTimeout(timerRef.current);
+        onSearch((inputRef.current?.value ?? "").trim());
       }}
     >
       <SearchIcon className="text-muted-2 pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-base" />
       <input
+        ref={inputRef}
         name="search"
         type="search"
         defaultValue={initial}
         placeholder="Search paintings…"
         aria-label="Search paintings"
-        onBlur={(e) => {
-          const value = e.target.value.trim();
-          if (value !== initial) onSearch(value);
+        onChange={(e) => {
+          const next = e.target.value;
+          if (timerRef.current) clearTimeout(timerRef.current);
+          timerRef.current = setTimeout(() => onSearch(next.trim()), 250);
         }}
         className="text-foreground border-border bg-background placeholder:text-muted-2 focus-visible:ring-ring h-10 w-full rounded-md border pr-3 pl-9 text-sm focus-visible:ring-2 focus-visible:outline-none"
       />

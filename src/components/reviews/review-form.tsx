@@ -86,7 +86,7 @@ export function ReviewForm({
         {submitting ? "Submitting…" : "Submit review"}
       </Button>
       <p className="text-muted-2 text-xs">
-        Reviews are checked before they appear publicly.
+        Your review will appear on this page shortly.
       </p>
     </form>
   );

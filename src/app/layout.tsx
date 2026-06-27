@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
+import { Cormorant_Garamond, Geist, Geist_Mono } from "next/font/google";
 
 import { Footer, Header } from "@/components/layout";
 import { siteConfig } from "@/config/site";
@@ -20,8 +20,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Elegant serif for display headings — gives the catalogue a gallery feel.
-const playfair = Playfair_Display({
+// Elegant high-contrast serif for display headings and the wordmark — gives the
+// catalogue an upscale, hand-painted-gallery feel.
+const cormorant = Cormorant_Garamond({
   variable: "--font-display",
   subsets: ["latin"],
   weight: ["500", "600", "700"],
@@ -60,7 +61,7 @@ export default function RootLayout({
       lang="en"
       // The theme init script mutates this element's class before hydration.
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} h-full antialiased`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />

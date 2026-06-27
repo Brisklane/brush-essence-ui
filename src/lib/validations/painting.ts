@@ -5,11 +5,14 @@ import { z } from "zod";
 export const paintingFormSchema = z.object({
   title: z.string().trim().min(1, "Title is required.").max(200),
   description: z.string().max(4000).optional(),
-  price: z.coerce.number().positive("Price must be greater than 0."),
-  currency: z.string().trim().length(3, "Use a 3-letter currency code."),
-  widthCm: z.coerce.number().positive("Width must be greater than 0."),
-  heightCm: z.coerce.number().positive("Height must be greater than 0."),
-  medium: z.string().max(100).optional(),
+  price: z.coerce
+    .number()
+    .positive("Price must be greater than 0.")
+    .refine((n) => Number.isInteger(n), "Price must be a whole number (no decimals)."),
+  // Dimensions are entered in inches; cm is derived automatically on submit.
+  widthIn: z.coerce.number().positive("Width must be greater than 0."),
+  heightIn: z.coerce.number().positive("Height must be greater than 0."),
+  mediumId: z.string().optional(),
   stockQuantity: z.coerce.number().int().min(0, "Stock cannot be negative."),
   categoryId: z.string().optional(),
   isPublished: z.boolean(),

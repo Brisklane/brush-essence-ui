@@ -1,7 +1,7 @@
 "use client";
 
 import { apiFetch } from "@/lib/api-client";
-import type { Category, PagedResult, Painting } from "@/types";
+import type { Category, Medium, PagedResult, Painting } from "@/types";
 
 async function parse<T>(response: Response): Promise<T> {
   if (!response.ok) {
@@ -48,10 +48,9 @@ export interface PaintingPayload {
   title: string;
   description?: string | null;
   price: number;
-  currency: string;
   widthCm: number;
   heightCm: number;
-  medium?: string | null;
+  mediumId?: string | null;
   imageUrl?: string | null;
   stockQuantity: number;
   isPublished: boolean;
@@ -143,4 +142,28 @@ export async function createCategory(
 
 export async function deleteCategory(id: string): Promise<void> {
   await expectOk(await apiFetch(`/api/categories/${id}`, { method: "DELETE" }));
+}
+
+// ----- Mediums -----
+
+export interface MediumPayload {
+  name: string;
+}
+
+export async function listMediums(): Promise<Medium[]> {
+  return parse(await apiFetch("/api/mediums"));
+}
+
+export async function createMedium(payload: MediumPayload): Promise<Medium> {
+  return parse(
+    await apiFetch("/api/mediums", {
+      method: "POST",
+      headers: jsonHeaders,
+      body: JSON.stringify(payload),
+    }),
+  );
+}
+
+export async function deleteMedium(id: string): Promise<void> {
+  await expectOk(await apiFetch(`/api/mediums/${id}`, { method: "DELETE" }));
 }

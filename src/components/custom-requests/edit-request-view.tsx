@@ -92,11 +92,6 @@ export function EditCustomRequestView({ requestId }: { requestId: string }) {
           title: request.title,
           description: request.description,
           preferredSize: request.preferredSize ?? undefined,
-          budgetAmount:
-            request.budgetAmount != null
-              ? String(request.budgetAmount)
-              : undefined,
-          currency: request.currency,
         }}
         defaultImages={request.images.map((image) => ({
           url: image.url,

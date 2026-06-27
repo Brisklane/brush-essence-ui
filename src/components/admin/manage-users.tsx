@@ -96,7 +96,7 @@ export function ManageUsers() {
       {error ? <p className="mt-6 text-red-600">{error}</p> : null}
 
       <div className="border-border mt-5 overflow-x-auto rounded-xl border">
-        <table className="w-full text-sm">
+        <table className="w-full min-w-176 text-sm">
           <thead className="bg-surface-2 text-muted text-left text-xs uppercase">
             <tr>
               <th className="px-4 py-3 font-medium">User</th>

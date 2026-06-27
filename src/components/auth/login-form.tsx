@@ -28,7 +28,7 @@ export function LoginForm() {
     setFormError(null);
     try {
       await login(values.email, values.password);
-      router.replace(searchParams.get("redirect") ?? "/account");
+      router.replace(searchParams.get("redirect") ?? "/");
     } catch (error) {
       setFormError(
         error instanceof Error ? error.message : "Something went wrong.",

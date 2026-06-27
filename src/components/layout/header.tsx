@@ -20,21 +20,21 @@ export function Header() {
 
   return (
     <header className="border-border bg-surface/85 sticky top-0 z-50 border-b backdrop-blur">
-      <Container className="flex h-20 items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
+      <Container className="flex h-16 items-center justify-between gap-2 sm:h-20 sm:gap-4">
+        <div className="flex min-w-0 items-center gap-2 sm:gap-3">
           <button
             type="button"
             aria-label="Open menu"
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen((v) => !v)}
-            className="text-muted hover:text-foreground -ml-1 inline-flex size-9 items-center justify-center rounded-md text-xl md:hidden"
+            className="text-muted hover:text-foreground -ml-1 inline-flex size-9 shrink-0 items-center justify-center rounded-md text-xl md:hidden"
           >
             {mobileOpen ? <CloseIcon /> : <MenuIcon />}
           </button>
-          <BrandMark className="items-start" />
+          <BrandMark className="min-w-0 items-start" />
         </div>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-9 md:flex">
           {siteConfig.nav.map((item) => {
             const active =
               item.href === "/"
@@ -45,8 +45,10 @@ export function Header() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "hover:text-brand-700 dark:hover:text-gold-300 text-sm font-medium tracking-wide transition-colors",
-                  active ? "text-foreground" : "text-muted",
+                  "after:bg-gold-500 relative text-xs font-medium tracking-[0.15em] uppercase transition-colors after:absolute after:-bottom-1.5 after:left-0 after:h-px after:transition-all after:duration-300 hover:text-foreground",
+                  active
+                    ? "text-foreground after:w-full"
+                    : "text-muted after:w-0 hover:after:w-full",
                 )}
               >
                 {item.label}
@@ -55,7 +57,7 @@ export function Header() {
           })}
         </nav>
 
-        <div className="flex items-center gap-1 sm:gap-2">
+        <div className="flex shrink-0 items-center gap-0.5 sm:gap-2">
           <button
             type="button"
             aria-label="Search the gallery"

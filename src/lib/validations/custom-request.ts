@@ -17,18 +17,6 @@ export const customRequestSchema = z.object({
     .trim()
     .max(200, "Preferred size is too long.")
     .optional(),
-  // Kept as a string (raw input) and parsed on submit; this keeps the form's
-  // input and output types aligned for react-hook-form.
-  budgetAmount: z
-    .string()
-    .trim()
-    .optional()
-    .refine(
-      (value) =>
-        !value || (Number(value) > 0 && Number(value) <= 10_000_000),
-      "Enter a budget greater than 0.",
-    ),
-  currency: z.string().trim().length(3, "Use a 3-letter currency code."),
 });
 
 export type CustomRequestValues = z.infer<typeof customRequestSchema>;

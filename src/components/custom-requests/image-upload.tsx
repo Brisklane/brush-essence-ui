@@ -6,6 +6,7 @@ import { CloseIcon, PlusIcon, Spinner } from "@/components/ui";
 import { resolveImageUrl } from "@/lib/image";
 import { uploadReferenceImage } from "@/lib/custom-requests-api";
 import { MAX_REFERENCE_IMAGES } from "@/lib/validations/custom-request";
+import { cn } from "@/lib/utils";
 
 export interface UploadedImage {
   url: string;
@@ -32,9 +33,16 @@ export function ImageUpload({
 }: ImageUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
+  const [dragging, setDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const atLimit = value.length >= max;
+
+  function handleDrop(event: React.DragEvent) {
+    event.preventDefault();
+    setDragging(false);
+    if (!disabled && !atLimit) void handleFiles(event.dataTransfer.files);
+  }
 
   async function handleFiles(files: FileList | null) {
     if (!files || files.length === 0) return;
@@ -99,8 +107,19 @@ export function ImageUpload({
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
+            onDragOver={(event) => {
+              event.preventDefault();
+              setDragging(true);
+            }}
+            onDragLeave={() => setDragging(false)}
+            onDrop={handleDrop}
             disabled={uploading}
-            className="border-border text-muted hover:border-brand-400 hover:text-foreground flex size-24 flex-col items-center justify-center gap-1 rounded-lg border border-dashed text-xs disabled:opacity-50"
+            className={cn(
+              "flex size-24 flex-col items-center justify-center gap-1 rounded-lg border border-dashed text-xs transition-colors disabled:opacity-50",
+              dragging
+                ? "border-brand-400 text-foreground bg-brand-50/60 dark:bg-brand-900/20"
+                : "border-border text-muted hover:border-brand-400 hover:text-foreground",
+            )}
           >
             {uploading ? (
               <Spinner className="size-5" />

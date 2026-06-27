@@ -88,19 +88,24 @@ function Hero() {
       <div className="bg-gold-500/10 absolute -top-24 -right-24 h-72 w-72 rounded-full blur-3xl" />
       <div className="bg-brand-500/10 absolute -bottom-24 -left-24 h-72 w-72 rounded-full blur-3xl" />
 
-      <Container className="relative flex min-h-[60vh] flex-col items-center justify-center gap-6 py-20 text-center sm:py-28">
-        <p className="text-gold-600 dark:text-gold-400 text-xs font-semibold tracking-[0.3em] uppercase">
+      <Container className="relative flex min-h-[55vh] flex-col items-center justify-center gap-5 py-16 text-center sm:min-h-[60vh] sm:gap-6 sm:py-24 md:py-32">
+        <p className="text-gold-600 dark:text-gold-400 flex items-center gap-3 text-[0.65rem] font-semibold tracking-[0.25em] uppercase sm:text-xs sm:tracking-[0.3em]">
+          <span className="bg-gold-500/60 hidden h-px w-8 sm:block" />
           Original Oil Paintings
+          <span className="bg-gold-500/60 hidden h-px w-8 sm:block" />
         </p>
-        <h1 className="font-display text-foreground max-w-3xl text-4xl leading-tight font-semibold tracking-tight sm:text-5xl md:text-6xl">
+        <h1 className="font-display text-foreground max-w-4xl text-4xl leading-[1.08] font-semibold sm:text-5xl sm:leading-[1.05] md:text-6xl lg:text-7xl">
           Discover Hand-Painted Masterpieces
         </h1>
         <p className="text-muted max-w-xl text-base sm:text-lg">
           Every canvas is an original, painted by hand and made to be lived with.
           Find the one that belongs on your wall.
         </p>
-        <div className="flex flex-wrap items-center justify-center gap-3">
-          <Link href="/gallery" className={buttonVariants({ size: "lg" })}>
+        <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
+          <Link
+            href="/gallery"
+            className={buttonVariants({ variant: "gold", size: "lg" })}
+          >
             Explore the Gallery
           </Link>
           <Link

@@ -8,51 +8,83 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* Brand palette — warm, gallery terracotta used for primary actions. */
-  --color-brand-50: #fdf6f0;
-  --color-brand-100: #f8e6d6;
-  --color-brand-200: #f0c9a8;
-  --color-brand-300: #e6a978;
-  --color-brand-400: #d98b4f;
-  --color-brand-500: #c9722f;
-  --color-brand-600: #b15c24;
-  --color-brand-700: #8f471f;
-  --color-brand-800: #6f381c;
-  --color-brand-900: #5a2f1a;
+  /*
+   * Brand — deep gallery navy. Primary actions, links and the footer wall.
+   * (Replaces the old terracotta to match the gallery art direction.)
+   */
+  --color-brand-50: #eef2f8;
+  --color-brand-100: #d9e2ef;
+  --color-brand-200: #b6c6dd;
+  --color-brand-300: #8aa3c5;
+  --color-brand-400: #5d7daa;
+  --color-brand-500: #3e5f8c;
+  --color-brand-600: #2f4d76;
+  --color-brand-700: #274061;
+  --color-brand-800: #21344e;
+  --color-brand-900: #1a2a40;
+  --color-brand-950: #111c2c;
 
-  /* Gold accent — refined gallery detail (rules, underlines, highlights). */
-  --color-gold-300: #e4c989;
-  --color-gold-400: #d4af6a;
-  --color-gold-500: #c19a4f;
-  --color-gold-600: #a47f38;
+  /* Gold — the refined gallery accent: rules, eyebrows, frames, highlights. */
+  --color-gold-50: #faf6ea;
+  --color-gold-100: #f2e7c6;
+  --color-gold-200: #e7d199;
+  --color-gold-300: #d9ba6c;
+  --color-gold-400: #cba74c;
+  --color-gold-500: #bd9134;
+  --color-gold-600: #9e7728;
+  --color-gold-700: #7c5d21;
+  --color-gold-800: #5f481d;
+  --color-gold-900: #4d3b1b;
+
+  /* Semantic — success / warning / danger. Defined once, used everywhere. */
+  --color-success-50: #ecfdf5;
+  --color-success-100: #d1fae5;
+  --color-success-300: #6ee7b7;
+  --color-success-500: #10b981;
+  --color-success-600: #059669;
+  --color-success-700: #047857;
+
+  --color-warning-50: #fffbeb;
+  --color-warning-100: #fef3c7;
+  --color-warning-300: #fcd34d;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+  --color-warning-700: #b45309;
+
+  --color-danger-50: #fef2f2;
+  --color-danger-100: #fee2e2;
+  --color-danger-300: #fca5a5;
+  --color-danger-500: #ef4444;
+  --color-danger-600: #dc2626;
+  --color-danger-700: #b91c1c;
 
   --font-display: var(--font-display), Georgia, "Times New Roman", serif;
 }
 
 /*
- * Semantic, theme-aware tokens. Components reference these (bg-surface,
- * text-foreground, border-border, …) so a single class flip restyles the
- * whole app between light and dark.
+ * Semantic, theme-aware surface tokens. Components reference these
+ * (bg-surface, text-foreground, border-border, …) so a single class flip
+ * restyles the whole app between light and dark.
  */
 :root {
-  --background: #faf8f5; /* page */
-  --surface: #ffffff; /* cards, header, inputs */
-  --surface-2: #f3ede4; /* muted panels / hover */
-  --foreground: #1f1b17; /* primary text */
-  --muted: #6b6258; /* secondary text */
-  --muted-2: #8a8076; /* tertiary text */
-  --border: #e7dfd3;
+  --background: #f7f3ec; /* warm ivory gallery wall */
+  --surface: #fffdf9; /* cards, header, inputs */
+  --surface-2: #efe9dd; /* muted panels / hover */
+  --foreground: #1c1a16; /* primary text (warm near-black) */
+  --muted: #5f574b; /* secondary text */
+  --muted-2: #8b8175; /* tertiary text */
+  --border: #e4ddcd;
   --ring: var(--color-brand-500);
 }
 
 .dark {
-  --background: #0e1621; /* deep navy gallery wall */
-  --surface: #16212f;
-  --surface-2: #1d2a3a;
-  --foreground: #f3efe9;
-  --muted: #a9b6c4;
-  --muted-2: #7e8b99;
-  --border: #2a3849;
+  --background: #0f141b; /* deep gallery wall */
+  --surface: #161d27;
+  --surface-2: #1f2835;
+  --foreground: #f3efe7;
+  --muted: #a8b2bf;
+  --muted-2: #74808f;
+  --border: #283341;
   --ring: var(--color-gold-400);
 }
 
@@ -82,8 +114,28 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   /* Smooth the flip between themes without animating page loads. */
   transition:
-    background-color 0.2s ease,
-    color 0.2s ease;
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+/* Display headings get the serif by default + tighter optical tracking. */
+.font-display {
+  font-feature-settings: "liga" 1, "dlig" 1;
+  letter-spacing: -0.01em;
+}
+
+/* Selection echoes the gold accent. */
+::selection {
+  background: var(--color-gold-200);
+  color: var(--color-brand-950);
+}
+
+.dark ::selection {
+  background: var(--color-gold-500);
+  color: var(--color-brand-950);
 }

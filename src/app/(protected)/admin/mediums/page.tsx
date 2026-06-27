@@ -3,41 +3,34 @@
 import { useEffect, useState } from "react";
 
 import { Button, ConfirmDialog, Input } from "@/components/ui";
-import {
-  createCategory,
-  deleteCategory,
-  listCategories,
-} from "@/lib/catalog-api";
-import type { Category } from "@/types";
+import { createMedium, deleteMedium, listMediums } from "@/lib/catalog-api";
+import type { Medium } from "@/types";
 
-export default function CategoriesPage() {
-  const [categories, setCategories] = useState<Category[]>([]);
+export default function MediumsPage() {
+  const [mediums, setMediums] = useState<Medium[]>([]);
   const [loading, setLoading] = useState(true);
   const [reloadKey, setReloadKey] = useState(0);
   const [error, setError] = useState<string | null>(null);
 
   const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
   const [saving, setSaving] = useState(false);
 
-  const [deleteTarget, setDeleteTarget] = useState<Category | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<Medium | null>(null);
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
-    listCategories()
+    listMediums()
       .then((result) => {
         if (!cancelled) {
           setError(null);
-          setCategories(result);
+          setMediums(result);
         }
       })
       .catch((caught) => {
         if (!cancelled) {
           setError(
-            caught instanceof Error
-              ? caught.message
-              : "Failed to load categories.",
+            caught instanceof Error ? caught.message : "Failed to load mediums.",
           );
         }
       })
@@ -59,17 +52,13 @@ export default function CategoriesPage() {
     setSaving(true);
     setError(null);
     try {
-      await createCategory({
-        name: name.trim(),
-        description: description.trim() || null,
-      });
+      await createMedium({ name: name.trim() });
       setName("");
-      setDescription("");
       setLoading(true);
       setReloadKey((key) => key + 1);
     } catch (caught) {
       setError(
-        caught instanceof Error ? caught.message : "Failed to add category.",
+        caught instanceof Error ? caught.message : "Failed to add medium.",
       );
     } finally {
       setSaving(false);
@@ -82,13 +71,13 @@ export default function CategoriesPage() {
     }
     setDeleting(true);
     try {
-      await deleteCategory(deleteTarget.id);
+      await deleteMedium(deleteTarget.id);
       setDeleteTarget(null);
       setLoading(true);
       setReloadKey((key) => key + 1);
     } catch (caught) {
       setError(
-        caught instanceof Error ? caught.message : "Failed to delete category.",
+        caught instanceof Error ? caught.message : "Failed to delete medium.",
       );
     } finally {
       setDeleting(false);
@@ -97,31 +86,25 @@ export default function CategoriesPage() {
 
   return (
     <div className="p-6 sm:p-8">
-      <h1 className="text-foreground text-2xl font-semibold">Categories</h1>
+      <h1 className="text-foreground text-2xl font-semibold">Mediums</h1>
+      <p className="text-muted mt-1">
+        The reusable list of techniques (e.g. “Oil on canvas”) you can pick from
+        when adding a painting.
+      </p>
 
       <form
         onSubmit={handleAdd}
-        className="mt-6 flex max-w-2xl flex-col gap-3 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:items-end"
+        className="mt-6 flex max-w-xl flex-col gap-3 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:items-end"
       >
         <div className="flex flex-1 flex-col gap-1.5">
-          <label htmlFor="cat-name" className="text-foreground text-sm font-medium">
+          <label htmlFor="med-name" className="text-foreground text-sm font-medium">
             Name
           </label>
           <Input
-            id="cat-name"
+            id="med-name"
             value={name}
             onChange={(event) => setName(event.target.value)}
-            placeholder="e.g. Landscapes"
-          />
-        </div>
-        <div className="flex flex-1 flex-col gap-1.5">
-          <label htmlFor="cat-desc" className="text-foreground text-sm font-medium">
-            Description (optional)
-          </label>
-          <Input
-            id="cat-desc"
-            value={description}
-            onChange={(event) => setDescription(event.target.value)}
+            placeholder="e.g. Oil on canvas"
           />
         </div>
         <Button type="submit" disabled={saving}>
@@ -136,37 +119,33 @@ export default function CategoriesPage() {
       ) : null}
 
       <div className="mt-6 overflow-x-auto rounded-xl border border-border bg-surface">
-        <table className="w-full min-w-160 text-left text-sm">
+        <table className="w-full min-w-96 text-left text-sm">
           <thead className="border-b border-border text-muted">
             <tr>
               <th className="p-3 font-medium">Name</th>
-              <th className="p-3 font-medium">Slug</th>
-              <th className="p-3 font-medium">Description</th>
               <th className="p-3 text-right font-medium">Actions</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={4} className="p-6 text-center text-muted">
+                <td colSpan={2} className="p-6 text-center text-muted">
                   Loading…
                 </td>
               </tr>
-            ) : categories.length > 0 ? (
-              categories.map((category) => (
+            ) : mediums.length > 0 ? (
+              mediums.map((medium) => (
                 <tr
-                  key={category.id}
+                  key={medium.id}
                   className="border-b border-border last:border-0"
                 >
-                  <td className="text-foreground p-3 font-medium">{category.name}</td>
-                  <td className="p-3 text-muted">{category.slug}</td>
-                  <td className="p-3 text-muted">
-                    {category.description ?? "—"}
+                  <td className="text-foreground p-3 font-medium">
+                    {medium.name}
                   </td>
                   <td className="p-3 text-right">
                     <button
                       type="button"
-                      onClick={() => setDeleteTarget(category)}
+                      onClick={() => setDeleteTarget(medium)}
                       className="font-medium text-red-600 hover:text-red-700"
                     >
                       Delete
@@ -176,8 +155,8 @@ export default function CategoriesPage() {
               ))
             ) : (
               <tr>
-                <td colSpan={4} className="p-6 text-center text-muted">
-                  No categories yet.
+                <td colSpan={2} className="p-6 text-center text-muted">
+                  No mediums yet.
                 </td>
               </tr>
             )}
@@ -187,10 +166,10 @@ export default function CategoriesPage() {
 
       <ConfirmDialog
         open={deleteTarget !== null}
-        title="Delete category?"
+        title="Delete medium?"
         description={
           deleteTarget
-            ? `“${deleteTarget.name}” will be removed. Its paintings stay but become uncategorized.`
+            ? `“${deleteTarget.name}” will be removed. Paintings using it stay but lose their medium.`
             : undefined
         }
         confirmLabel="Delete"

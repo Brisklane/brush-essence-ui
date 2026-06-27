@@ -12,7 +12,9 @@ const navItems = [
   { href: "/admin/reviews", label: "Reviews" },
   { href: "/admin/users", label: "Users" },
   { href: "/admin/paintings", label: "Paintings" },
+  { href: "/admin/promotions", label: "Promotions" },
   { href: "/admin/categories", label: "Categories" },
+  { href: "/admin/mediums", label: "Mediums" },
 ];
 
 export function AdminSidebar() {
@@ -20,7 +22,7 @@ export function AdminSidebar() {
 
   return (
     <aside className="w-full shrink-0 border-b border-border bg-surface sm:w-56 sm:border-r sm:border-b-0">
-      <nav className="flex gap-1 p-3 sm:flex-col">
+      <nav className="flex flex-wrap gap-1 p-3 sm:flex-col sm:flex-nowrap">
         {navItems.map((item) => {
           const active =
             item.href === "/admin"

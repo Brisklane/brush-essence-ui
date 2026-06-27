@@ -10,6 +10,7 @@ export const CUSTOM_REQUEST_STATUS_LABELS: Record<CustomRequestStatus, string> =
   {
     Submitted: "Submitted",
     Reviewed: "Reviewed",
+    Quoted: "Quoted",
     InProgress: "In progress",
     Completed: "Completed",
     Declined: "Declined",
@@ -21,15 +22,17 @@ export const CUSTOM_REQUEST_STATUS_DESCRIPTIONS: Record<
 > = {
   Submitted: "We've received your request and will review it shortly.",
   Reviewed: "The artist has reviewed your request.",
+  Quoted: "The artist has sent you a price quote to approve.",
   InProgress: "Your custom piece is being painted.",
   Completed: "Your custom piece is finished.",
-  Declined: "Unfortunately this request couldn't be taken on.",
+  Declined: "This request won't be going ahead.",
 };
 
 /** Happy-path milestones, in order, used to draw the progress tracker. */
 export const CUSTOM_REQUEST_PROGRESS_STEPS: CustomRequestStatus[] = [
   "Submitted",
   "Reviewed",
+  "Quoted",
   "InProgress",
   "Completed",
 ];
@@ -39,8 +42,9 @@ export const CUSTOM_REQUEST_STATUS_TRANSITIONS: Record<
   CustomRequestStatus,
   CustomRequestStatus[]
 > = {
-  Submitted: ["Reviewed", "Declined"],
-  Reviewed: ["InProgress", "Declined"],
+  Submitted: ["Reviewed", "Quoted", "Declined"],
+  Reviewed: ["Quoted", "Declined"],
+  Quoted: ["InProgress", "Declined"],
   InProgress: ["Completed", "Declined"],
   Completed: [],
   Declined: [],
@@ -54,6 +58,8 @@ export function customRequestStatusBadgeVariant(
       return "success";
     case "Declined":
       return "danger";
+    case "Quoted":
+      return "warning";
     case "InProgress":
       return "brand";
     case "Reviewed":

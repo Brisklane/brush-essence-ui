@@ -31,7 +31,7 @@ export function RegisterForm() {
         password: values.password,
         fullName: values.fullName?.trim() || undefined,
       });
-      router.replace("/account");
+      router.replace("/");
     } catch (error) {
       setFormError(
         error instanceof Error ? error.message : "Something went wrong.",

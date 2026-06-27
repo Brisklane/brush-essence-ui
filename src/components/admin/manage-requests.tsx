@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { CustomRequestStatusBadge } from "@/components/custom-requests";
-import { Input, Select, Spinner } from "@/components/ui";
+import { Button, Input, Select, Spinner } from "@/components/ui";
 import { listAdminRequests, updateRequestStatus } from "@/lib/admin-api";
 import {
   CUSTOM_REQUEST_STATUS_LABELS,
@@ -17,6 +17,7 @@ import type {
 } from "@/types";
 
 import { AdminPagination } from "./admin-pagination";
+import { RequestQuoteDialog } from "./request-quote-dialog";
 import { StatusUpdater } from "./status-updater";
 
 const STATUSES = Object.keys(
@@ -35,6 +36,8 @@ export function ManageRequests() {
   );
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [quoting, setQuoting] =
+    useState<AdminCustomRequestListItem | null>(null);
 
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
@@ -117,7 +120,7 @@ export function ManageRequests() {
       {error ? <p className="mt-6 text-red-600">{error}</p> : null}
 
       <div className="border-border mt-5 overflow-x-auto rounded-xl border">
-        <table className="w-full text-sm">
+        <table className="w-full min-w-176 text-sm">
           <thead className="bg-surface-2 text-muted text-left text-xs uppercase">
             <tr>
               <th className="px-4 py-3 font-medium">Request</th>
@@ -160,9 +163,22 @@ export function ManageRequests() {
                     <CustomRequestStatusBadge status={request.status} size="sm" />
                   </td>
                   <td className="px-4 py-3">
-                    <div className="flex justify-end">
+                    <div className="flex flex-col items-end gap-2">
+                      {CUSTOM_REQUEST_STATUS_TRANSITIONS[request.status].includes(
+                        "Quoted",
+                      ) ? (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setQuoting(request)}
+                        >
+                          Send quote
+                        </Button>
+                      ) : null}
                       <StatusUpdater
-                        next={CUSTOM_REQUEST_STATUS_TRANSITIONS[request.status]}
+                        next={CUSTOM_REQUEST_STATUS_TRANSITIONS[
+                          request.status
+                        ].filter((s) => s !== "Quoted")}
                         labels={CUSTOM_REQUEST_STATUS_LABELS}
                         onApply={onApplyStatus(request)}
                       />
@@ -180,6 +196,27 @@ export function ManageRequests() {
           </tbody>
         </table>
       </div>
+
+      {quoting ? (
+        <RequestQuoteDialog
+          request={quoting}
+          onClose={() => setQuoting(null)}
+          onSaved={(updated) =>
+            setData((current) =>
+              current
+                ? {
+                    ...current,
+                    items: current.items.map((item) =>
+                      item.id === updated.id
+                        ? { ...item, status: updated.status }
+                        : item,
+                    ),
+                  }
+                : current,
+            )
+          }
+        />
+      ) : null}
 
       {data ? (
         <AdminPagination

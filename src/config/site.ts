@@ -7,6 +7,12 @@ export const siteConfig = {
   tagline: "Hand-painted oil paintings on canvas",
   description:
     "Original, hand-painted oil paintings on canvas — each piece one of a kind. Browse the gallery and bring fine art home.",
+  /**
+   * Support inbox shown on the /support page and footer. Messages from the
+   * contact form open the visitor's email app addressed here.
+   * TODO: replace with your real support email.
+   */
+  supportEmail: "support@brushessence.com",
   /** Primary storefront navigation (kept to routes that actually exist). */
   nav: [
     { label: "Home", href: "/" },

@@ -19,9 +19,9 @@ import { ReviewsList } from "./reviews-list";
 import { StarRating } from "./star-rating";
 
 const STATUS_NOTE: Record<Review["status"], string> = {
-  Pending: "Your review is awaiting moderation and will appear once approved.",
-  Approved: "Your review is published. Thank you!",
-  Rejected: "Your review wasn't approved for publication.",
+  Pending: "Thanks for sharing — your review will appear here shortly.",
+  Approved: "Your review is live. Thank you!",
+  Rejected: "Thanks for your feedback.",
 };
 
 export function ReviewsSection({ paintingId }: { paintingId: string }) {

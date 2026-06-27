@@ -2,7 +2,6 @@ import Link from "next/link";
 
 import { siteConfig } from "@/config/site";
 
-import { BrandMark } from "./brand-mark";
 import { Container } from "./container";
 
 const exploreLinks = [
@@ -11,13 +10,30 @@ const exploreLinks = [
   { label: "Best value", href: "/gallery?sort=priceAsc" },
 ];
 
+/**
+ * Deep-navy gallery footer with gold accents — a fixed brand surface that reads
+ * the same in light and dark mode (so it uses explicit brand colours, not the
+ * theme-aware surface tokens).
+ */
 export function Footer() {
   return (
-    <footer className="border-border bg-surface mt-auto border-t">
-      <Container className="grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="space-y-3">
-          <BrandMark className="items-start" showTagline={false} />
-          <p className="text-muted max-w-xs text-sm">{siteConfig.description}</p>
+    <footer className="bg-brand-950 mt-auto text-brand-100">
+      {/* Gold hairline rule across the top. */}
+      <div className="from-gold-500/0 via-gold-500/70 to-gold-500/0 h-px bg-linear-to-r" />
+
+      <Container className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="space-y-4">
+          <Link href="/" className="inline-flex flex-col">
+            <span className="font-display text-2xl leading-none font-semibold tracking-[0.22em] text-white uppercase">
+              {siteConfig.name}
+            </span>
+            <span className="text-gold-300/80 mt-1.5 text-[0.6rem] tracking-[0.32em] uppercase">
+              Original Oil Paintings
+            </span>
+          </Link>
+          <p className="max-w-xs text-sm text-brand-200/80">
+            {siteConfig.description}
+          </p>
         </div>
 
         <FooterColumn title="Explore">
@@ -30,8 +46,9 @@ export function Footer() {
 
         <FooterColumn title="Account">
           <FooterLink href="/account">My account</FooterLink>
-          <FooterLink href="/login">Sign in</FooterLink>
-          <FooterLink href="/register">Create account</FooterLink>
+          <FooterLink href="/orders">My orders</FooterLink>
+          <FooterLink href="/custom-requests">Commissions</FooterLink>
+          <FooterLink href="/support">Support</FooterLink>
         </FooterColumn>
 
         <FooterColumn title="Follow">
@@ -43,12 +60,23 @@ export function Footer() {
         </FooterColumn>
       </Container>
 
-      <div className="border-border border-t">
-        <Container className="text-muted flex flex-col items-center justify-between gap-2 py-6 text-sm sm:flex-row">
+      <div className="border-t border-brand-800/60">
+        <Container className="flex flex-col items-center justify-between gap-2 py-6 text-sm text-brand-200/70 sm:flex-row">
           <p>
             © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
           </p>
-          <p>{siteConfig.tagline}</p>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/support"
+              className="font-medium transition-colors hover:text-gold-300"
+            >
+              Support
+            </Link>
+            <span className="text-brand-200/40" aria-hidden>
+              ·
+            </span>
+            <span>{siteConfig.tagline}</span>
+          </div>
         </Container>
       </div>
     </footer>
@@ -64,10 +92,10 @@ function FooterColumn({
 }) {
   return (
     <div>
-      <h3 className="text-foreground mb-3 text-sm font-semibold tracking-wide uppercase">
+      <h3 className="text-gold-300 mb-3 text-xs font-semibold tracking-[0.18em] uppercase">
         {title}
       </h3>
-      <ul className="space-y-2">{children}</ul>
+      <ul className="space-y-2.5">{children}</ul>
     </div>
   );
 }
@@ -86,7 +114,7 @@ function FooterLink({
       <Link
         href={href}
         {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-        className="text-muted hover:text-brand-700 dark:hover:text-gold-300 text-sm transition-colors"
+        className="text-sm text-brand-200/80 transition-colors hover:text-gold-300"
       >
         {children}
       </Link>
