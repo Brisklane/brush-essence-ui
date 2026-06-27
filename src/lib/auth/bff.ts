@@ -19,12 +19,29 @@ interface AuthResult {
 }
 
 /** Calls the .NET API from the server (never exposed to the browser). */
-export function callApi(path: string, init?: RequestInit): Promise<Response> {
-  return fetch(`${serverEnv.API_BASE_URL}${path}`, {
-    ...init,
-    headers: { "Content-Type": "application/json", ...init?.headers },
-    cache: "no-store",
-  });
+export async function callApi(
+  path: string,
+  init?: RequestInit,
+): Promise<Response> {
+  try {
+    return await fetch(`${serverEnv.API_BASE_URL}${path}`, {
+      ...init,
+      headers: { "Content-Type": "application/json", ...init?.headers },
+      cache: "no-store",
+    });
+  } catch {
+    // The API is unreachable (down / network blip). Return a clean 503 so proxy
+    // routes never throw an unhandled error — the browser gets a friendly message.
+    return new Response(
+      JSON.stringify({
+        title: "Service unavailable",
+        detail:
+          "We couldn't reach the server right now. Please try again in a moment.",
+        status: 503,
+      }),
+      { status: 503, headers: { "Content-Type": "application/json" } },
+    );
+  }
 }
 
 async function readJson(response: Response): Promise<unknown> {

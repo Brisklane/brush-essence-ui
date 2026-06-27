@@ -2,10 +2,44 @@ import Link from "next/link";
 
 import { ProductCard } from "@/components/catalog";
 import { Container } from "@/components/layout";
+import { PromotionCountdown } from "@/components/promotions/promotion-countdown";
 import { buttonVariants } from "@/components/ui";
+import { siteConfig } from "@/config/site";
+import { env } from "@/lib/env";
 import { fetchCatalog } from "@/lib/storefront";
 import { cn } from "@/lib/utils";
 import type { Painting } from "@/types";
+
+// Organization + WebSite structured data: powers the brand knowledge panel and
+// the sitelinks search box in Google. The Product/AggregateRating schema lives
+// on each painting page.
+const siteJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${env.NEXT_PUBLIC_SITE_URL}/#organization`,
+      name: siteConfig.name,
+      url: env.NEXT_PUBLIC_SITE_URL,
+      description: siteConfig.description,
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${env.NEXT_PUBLIC_SITE_URL}/#website`,
+      name: siteConfig.name,
+      url: env.NEXT_PUBLIC_SITE_URL,
+      publisher: { "@id": `${env.NEXT_PUBLIC_SITE_URL}/#organization` },
+      potentialAction: {
+        "@type": "SearchAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: `${env.NEXT_PUBLIC_SITE_URL}/gallery?search={search_term_string}`,
+        },
+        "query-input": "required name=search_term_string",
+      },
+    },
+  ],
+};
 
 // Reflect new paintings without a redeploy.
 export const dynamic = "force-dynamic";
@@ -28,6 +62,11 @@ export default async function HomePage() {
 
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd) }}
+      />
+      <PromotionCountdown />
       <Hero />
 
       {featured.length > 0 ? (
@@ -155,6 +194,21 @@ function Section({
   );
 }
 
+const STUDIO_PROMISES = [
+  {
+    title: "100% Hand-Painted",
+    text: "Original oils on canvas — never prints or reproductions.",
+  },
+  {
+    title: "Made to Last",
+    text: "Hand-varnished, gallery-quality finish built to age beautifully.",
+  },
+  {
+    title: "Ready to Hang",
+    text: "Carefully packed and shipped, arriving prepared for your wall.",
+  },
+];
+
 function ArtistStory() {
   return (
     <section className="bg-surface-2/40 py-16 sm:py-20">
@@ -181,11 +235,31 @@ function ArtistStory() {
             </Link>
           </div>
         </div>
-        <div className="border-border bg-surface relative aspect-[4/3] overflow-hidden rounded-2xl border shadow-sm">
-          <div className="from-brand-200/40 to-gold-500/20 absolute inset-0 bg-linear-to-br" />
-          <div className="text-muted absolute inset-0 flex items-center justify-center">
-            <span className="font-display text-2xl">Brush Essence Studio</span>
-          </div>
+
+        <div className="border-border bg-surface rounded-2xl border p-6 shadow-sm sm:p-8">
+          <ul className="divide-border divide-y">
+            {STUDIO_PROMISES.map((promise) => (
+              <li
+                key={promise.title}
+                className="flex items-start gap-4 py-4 first:pt-0 last:pb-0"
+              >
+                <span
+                  className="bg-gold-500/10 text-gold-600 dark:text-gold-400 mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full text-lg"
+                  aria-hidden
+                >
+                  ✦
+                </span>
+                <div>
+                  <p className="font-display text-foreground text-lg font-semibold">
+                    {promise.title}
+                  </p>
+                  <p className="text-muted mt-0.5 text-sm leading-relaxed">
+                    {promise.text}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
       </Container>
     </section>

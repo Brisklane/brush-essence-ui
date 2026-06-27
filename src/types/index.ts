@@ -292,6 +292,15 @@ export interface Promotion {
   createdAt: string;
 }
 
+/** Public, slim view of a live promotion for the storefront banner. */
+export interface ActivePromotion {
+  name: string;
+  discountType: DiscountType;
+  value: number;
+  scope: PromotionScope;
+  endsAt: string | null;
+}
+
 export interface SavePromotionPayload {
   name: string;
   discountType: DiscountType;

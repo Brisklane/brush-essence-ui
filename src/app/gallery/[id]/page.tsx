@@ -6,6 +6,7 @@ import { AddToCart, ProductCard } from "@/components/catalog";
 import { Container } from "@/components/layout";
 import { ReviewsSection, StarRating } from "@/components/reviews";
 import { Badge, PriceTag } from "@/components/ui";
+import { siteConfig } from "@/config/site";
 import { env } from "@/lib/env";
 import { resolveImageUrl } from "@/lib/image";
 import { fetchCatalog, fetchPainting } from "@/lib/storefront";
@@ -28,7 +29,10 @@ export async function generateMetadata({
     description:
       painting.description ??
       `${painting.title} — an original hand-painted oil on canvas.`,
-    openGraph: image ? { images: [{ url: image }] } : undefined,
+    alternates: { canonical: `/gallery/${painting.id}` },
+    openGraph: image
+      ? { type: "website", images: [{ url: image }] }
+      : undefined,
   };
 }
 
@@ -67,10 +71,12 @@ export default async function PaintingPage({ params }: PageProps) {
       `${painting.title} — an original hand-painted oil on canvas.`,
     image: image ? [image] : undefined,
     category: painting.categoryName ?? undefined,
+    brand: { "@type": "Brand", name: siteConfig.name },
     offers: {
       "@type": "Offer",
       price: painting.discountedPrice ?? painting.price,
       priceCurrency: painting.currency,
+      itemCondition: "https://schema.org/NewCondition",
       availability: soldOut
         ? "https://schema.org/OutOfStock"
         : "https://schema.org/InStock",
@@ -86,11 +92,41 @@ export default async function PaintingPage({ params }: PageProps) {
         : undefined,
   };
 
+  // Breadcrumb structured data mirrors the visible trail below.
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: env.NEXT_PUBLIC_SITE_URL,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Gallery",
+        item: `${env.NEXT_PUBLIC_SITE_URL}/gallery`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: painting.title,
+        item: `${env.NEXT_PUBLIC_SITE_URL}/gallery/${painting.id}`,
+      },
+    ],
+  };
+
   return (
     <div className="py-8 sm:py-12">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <Container>
         {/* Breadcrumb */}

@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: "Gallery",
   description:
     "Browse original, hand-painted oil paintings on canvas. Filter by category and price, sort, and find the piece that speaks to you.",
+  // Filter/sort/search produce many query-string variants of this page; point
+  // them all at the clean /gallery URL to avoid duplicate-content dilution.
+  alternates: { canonical: "/gallery" },
 };
 
 export default function GalleryPage() {
