@@ -61,11 +61,11 @@ export function PriceTag({
 
   return (
     <span className={cn("flex items-baseline gap-2", className)}>
-      <span className="text-foreground font-semibold">
-        {formatPrice(discountedPrice, currency)}
-      </span>
-      <span className="text-muted-2 text-sm font-normal line-through">
+      <span className="text-muted-2 text-[0.7em] font-normal line-through">
         {formatPrice(price, currency)}
+      </span>
+      <span className="font-semibold text-red-700 dark:text-red-400">
+        {formatPrice(discountedPrice, currency)}
       </span>
     </span>
   );

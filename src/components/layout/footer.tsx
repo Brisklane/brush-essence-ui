@@ -47,7 +47,7 @@ export function Footer() {
         <FooterColumn title="Account">
           <FooterLink href="/account">My account</FooterLink>
           <FooterLink href="/orders">My orders</FooterLink>
-          <FooterLink href="/custom-requests">Commissions</FooterLink>
+          <FooterLink href="/custom-requests">Custom Painting</FooterLink>
           <FooterLink href="/support">Support</FooterLink>
         </FooterColumn>
 

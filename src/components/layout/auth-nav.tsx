@@ -36,7 +36,7 @@ export function AuthNav() {
           </Link>
         ) : null}
         <Link href="/custom-requests" className={linkClass}>
-          Commissions
+          Custom Painting
         </Link>
         <Link href="/orders" className={linkClass}>
           Orders

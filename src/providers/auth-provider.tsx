@@ -34,6 +34,8 @@ export interface AuthContextValue {
   login: (email: string, password: string) => Promise<void>;
   register: (input: RegisterInput) => Promise<void>;
   logout: () => Promise<void>;
+  /** Re-fetches the session (and fresh user profile, e.g. after verifying email). */
+  refreshSession: () => Promise<boolean>;
 }
 
 interface SessionResponse {
@@ -179,6 +181,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, [applySession, clearSession]);
 
-  const value: AuthContextValue = { user, status, login, register, logout };
+  const value: AuthContextValue = {
+    user,
+    status,
+    login,
+    register,
+    logout,
+    refreshSession: silentRefresh,
+  };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

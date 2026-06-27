@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Geist, Geist_Mono } from "next/font/google";
 
+import { EmailVerificationBanner } from "@/components/auth/email-verification-banner";
 import { Footer, Header } from "@/components/layout";
 import { siteConfig } from "@/config/site";
 import { env } from "@/lib/env";
@@ -77,6 +78,7 @@ export default function RootLayout({
           <AuthProvider>
             <CartProvider>
               <Header />
+              <EmailVerificationBanner />
               <main id="main-content" className="flex-1">
                 {children}
               </main>

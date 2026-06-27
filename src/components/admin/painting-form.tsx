@@ -234,6 +234,8 @@ export function PaintingForm({ painting }: { painting?: Painting }) {
           id="stockQuantity"
           label="Stock quantity"
           type="number"
+          min="0"
+          step="1"
           error={errors.stockQuantity?.message}
           {...register("stockQuantity")}
         />
