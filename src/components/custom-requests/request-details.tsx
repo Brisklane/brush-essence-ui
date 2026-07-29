@@ -88,7 +88,10 @@ export function RequestDetails({ requestId }: { requestId: string }) {
 
   return (
     <div>
-      <Link href="/custom-requests" className="text-muted hover:text-foreground text-sm">
+      <Link
+        href="/custom-requests"
+        className="text-muted hover:text-foreground text-sm"
+      >
         ← Your custom requests
       </Link>
 
@@ -131,10 +134,7 @@ export function RequestDetails({ requestId }: { requestId: string }) {
             <p className="mt-3 text-sm text-red-600">{actionError}</p>
           ) : null}
           <div className="mt-4 flex flex-wrap gap-3">
-            <Button
-              onClick={() => respondToQuote("approve")}
-              disabled={acting}
-            >
+            <Button onClick={() => respondToQuote("approve")} disabled={acting}>
               {acting ? "Working…" : "Approve quote"}
             </Button>
             <Button
@@ -160,7 +160,9 @@ export function RequestDetails({ requestId }: { requestId: string }) {
           </section>
 
           <section className="border-border bg-surface rounded-xl border p-6 shadow-sm">
-            <h2 className="text-foreground text-lg font-semibold">Your brief</h2>
+            <h2 className="text-foreground text-lg font-semibold">
+              Your brief
+            </h2>
             <p className="text-muted mt-3 leading-relaxed whitespace-pre-line">
               {request.description}
             </p>

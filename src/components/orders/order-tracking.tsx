@@ -91,7 +91,9 @@ export function OrderTracking({ tracking }: { tracking: OrderTrackingData }) {
                 {ORDER_STATUS_DESCRIPTIONS[step]}
               </p>
               {when ? (
-                <p className="text-muted-2 mt-0.5 text-xs">{formatWhen(when)}</p>
+                <p className="text-muted-2 mt-0.5 text-xs">
+                  {formatWhen(when)}
+                </p>
               ) : null}
             </div>
           </li>

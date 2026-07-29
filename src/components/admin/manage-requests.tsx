@@ -31,13 +31,13 @@ function formatDate(iso: string): string {
 }
 
 export function ManageRequests() {
-  const [data, setData] = useState<PagedResult<AdminCustomRequestListItem> | null>(
-    null,
-  );
+  const [data, setData] =
+    useState<PagedResult<AdminCustomRequestListItem> | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [quoting, setQuoting] =
-    useState<AdminCustomRequestListItem | null>(null);
+  const [quoting, setQuoting] = useState<AdminCustomRequestListItem | null>(
+    null,
+  );
 
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
@@ -59,7 +59,9 @@ export function ManageRequests() {
       })
       .catch((err: unknown) => {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Couldn't load requests.");
+          setError(
+            err instanceof Error ? err.message : "Couldn't load requests.",
+          );
         }
       })
       .finally(() => {
@@ -160,13 +162,16 @@ export function ManageRequests() {
                     {formatDate(request.createdAt)}
                   </td>
                   <td className="px-4 py-3">
-                    <CustomRequestStatusBadge status={request.status} size="sm" />
+                    <CustomRequestStatusBadge
+                      status={request.status}
+                      size="sm"
+                    />
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex flex-col items-end gap-2">
-                      {CUSTOM_REQUEST_STATUS_TRANSITIONS[request.status].includes(
-                        "Quoted",
-                      ) ? (
+                      {CUSTOM_REQUEST_STATUS_TRANSITIONS[
+                        request.status
+                      ].includes("Quoted") ? (
                         <Button
                           size="sm"
                           variant="outline"

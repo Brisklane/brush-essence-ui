@@ -11,7 +11,13 @@ import {
 } from "@/components/admin/analytics";
 import { CustomRequestStatusBadge } from "@/components/custom-requests";
 import { OrderStatusBadge } from "@/components/orders";
-import { Card, CardContent, CardTitle, formatPrice, Spinner } from "@/components/ui";
+import {
+  Card,
+  CardContent,
+  CardTitle,
+  formatPrice,
+  Spinner,
+} from "@/components/ui";
 import { getDashboardSummary, getReport } from "@/lib/admin-api";
 import { CUSTOM_REQUEST_STATUS_LABELS } from "@/lib/custom-request-status";
 import { ORDER_STATUS_LABELS } from "@/lib/order-status";
@@ -177,16 +183,22 @@ export function DashboardStats() {
           <CardContent>
             <div className="flex items-center justify-between">
               <CardTitle>Recent orders</CardTitle>
-              <Link href="/admin/orders" className="text-brand-700 hover:text-brand-800 text-sm">
+              <Link
+                href="/admin/orders"
+                className="text-brand-700 hover:text-brand-800 text-sm"
+              >
                 View all
               </Link>
             </div>
-            <ul className="mt-4 divide-border divide-y">
+            <ul className="divide-border mt-4 divide-y">
               {summary.recentOrders.length === 0 ? (
                 <li className="text-muted-2 py-3 text-sm">No orders yet.</li>
               ) : (
                 summary.recentOrders.map((order) => (
-                  <li key={order.id} className="flex items-center justify-between gap-3 py-3">
+                  <li
+                    key={order.id}
+                    className="flex items-center justify-between gap-3 py-3"
+                  >
                     <div className="min-w-0">
                       <p className="text-foreground truncate text-sm font-medium">
                         {order.orderNumber}
@@ -212,16 +224,22 @@ export function DashboardStats() {
           <CardContent>
             <div className="flex items-center justify-between">
               <CardTitle>Recent requests</CardTitle>
-              <Link href="/admin/requests" className="text-brand-700 hover:text-brand-800 text-sm">
+              <Link
+                href="/admin/requests"
+                className="text-brand-700 hover:text-brand-800 text-sm"
+              >
                 View all
               </Link>
             </div>
-            <ul className="mt-4 divide-border divide-y">
+            <ul className="divide-border mt-4 divide-y">
               {summary.recentRequests.length === 0 ? (
                 <li className="text-muted-2 py-3 text-sm">No requests yet.</li>
               ) : (
                 summary.recentRequests.map((request) => (
-                  <li key={request.id} className="flex items-center justify-between gap-3 py-3">
+                  <li
+                    key={request.id}
+                    className="flex items-center justify-between gap-3 py-3"
+                  >
                     <div className="min-w-0">
                       <p className="text-foreground truncate text-sm font-medium">
                         {request.title}
@@ -230,7 +248,10 @@ export function DashboardStats() {
                         {request.customerEmail}
                       </p>
                     </div>
-                    <CustomRequestStatusBadge status={request.status} size="sm" />
+                    <CustomRequestStatusBadge
+                      status={request.status}
+                      size="sm"
+                    />
                   </li>
                 ))
               )}

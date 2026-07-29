@@ -136,8 +136,12 @@ export function ManagePromotions() {
                     {promotion.name}
                   </td>
                   <td className="px-4 py-3">{discountLabel(promotion)}</td>
-                  <td className="text-muted px-4 py-3">{scopeLabel(promotion)}</td>
-                  <td className="text-muted px-4 py-3">{windowLabel(promotion)}</td>
+                  <td className="text-muted px-4 py-3">
+                    {scopeLabel(promotion)}
+                  </td>
+                  <td className="text-muted px-4 py-3">
+                    {windowLabel(promotion)}
+                  </td>
                   <td className="px-4 py-3">
                     {promotion.isLive ? (
                       <Badge variant="success" size="sm">

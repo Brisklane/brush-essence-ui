@@ -13,8 +13,8 @@ export default function PaintingNotFound() {
         Painting not found
       </h1>
       <p className="text-muted max-w-md">
-        This piece may have been sold or is no longer available. Explore the rest
-        of the collection instead.
+        This piece may have been sold or is no longer available. Explore the
+        rest of the collection instead.
       </p>
       <Link href="/gallery" className={buttonVariants({})}>
         Back to gallery

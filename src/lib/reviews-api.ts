@@ -15,7 +15,9 @@ async function parse<T>(response: Response): Promise<T> {
       title?: string;
     } | null;
     throw new Error(
-      problem?.detail ?? problem?.title ?? `Request failed (${response.status}).`,
+      problem?.detail ??
+        problem?.title ??
+        `Request failed (${response.status}).`,
     );
   }
   return response.json() as Promise<T>;

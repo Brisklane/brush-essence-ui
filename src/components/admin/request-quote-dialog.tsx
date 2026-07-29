@@ -33,7 +33,9 @@ export function RequestQuoteDialog({
     setSaving(true);
     setError(null);
     try {
-      onSaved(await setRequestQuote(request.id, value, note.trim() || undefined));
+      onSaved(
+        await setRequestQuote(request.id, value, note.trim() || undefined),
+      );
       onClose();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Couldn't send the quote.");

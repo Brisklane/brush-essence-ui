@@ -4,7 +4,13 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
-import { CartIcon, CloseIcon, MenuIcon, SearchIcon, ThemeToggle } from "@/components/ui";
+import {
+  CartIcon,
+  CloseIcon,
+  MenuIcon,
+  SearchIcon,
+  ThemeToggle,
+} from "@/components/ui";
 import { siteConfig } from "@/config/site";
 import { useCart } from "@/hooks/use-cart";
 import { cn } from "@/lib/utils";
@@ -45,7 +51,7 @@ export function Header() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "after:bg-gold-500 relative text-xs font-medium tracking-[0.15em] uppercase transition-colors after:absolute after:-bottom-1.5 after:left-0 after:h-px after:transition-all after:duration-300 hover:text-foreground",
+                  "after:bg-gold-500 hover:text-foreground relative text-xs font-medium tracking-[0.15em] uppercase transition-colors after:absolute after:-bottom-1.5 after:left-0 after:h-px after:transition-all after:duration-300",
                   active
                     ? "text-foreground after:w-full"
                     : "text-muted after:w-0 hover:after:w-full",
@@ -74,7 +80,9 @@ export function Header() {
         </div>
       </Container>
 
-      {searchOpen ? <HeaderSearch onClose={() => setSearchOpen(false)} /> : null}
+      {searchOpen ? (
+        <HeaderSearch onClose={() => setSearchOpen(false)} />
+      ) : null}
 
       {mobileOpen ? (
         <div className="border-border bg-surface border-t md:hidden">
@@ -139,7 +147,9 @@ function HeaderSearch({ onClose }: { onClose: () => void }) {
     event.preventDefault();
     const value = inputRef.current?.value.trim() ?? "";
     onClose();
-    router.push(value ? `/gallery?search=${encodeURIComponent(value)}` : "/gallery");
+    router.push(
+      value ? `/gallery?search=${encodeURIComponent(value)}` : "/gallery",
+    );
   }
 
   return (

@@ -203,7 +203,8 @@ export function PaintingForm({ painting }: { painting?: Painting }) {
           />
         </div>
         <p className="text-muted-2 mt-1.5 text-xs">
-          Enter size in inches — {cmPreview ?? "centimetres are added automatically."}
+          Enter size in inches —{" "}
+          {cmPreview ?? "centimetres are added automatically."}
         </p>
       </div>
 

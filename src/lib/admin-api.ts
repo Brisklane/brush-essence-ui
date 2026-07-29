@@ -27,7 +27,9 @@ async function parse<T>(response: Response): Promise<T> {
       title?: string;
     } | null;
     throw new Error(
-      problem?.detail ?? problem?.title ?? `Request failed (${response.status}).`,
+      problem?.detail ??
+        problem?.title ??
+        `Request failed (${response.status}).`,
     );
   }
   return response.json() as Promise<T>;
@@ -35,7 +37,9 @@ async function parse<T>(response: Response): Promise<T> {
 
 const jsonHeaders = { "Content-Type": "application/json" };
 
-function buildQuery(params: Record<string, string | number | undefined>): string {
+function buildQuery(
+  params: Record<string, string | number | undefined>,
+): string {
   const query = new URLSearchParams();
   for (const [key, value] of Object.entries(params)) {
     if (value !== undefined && value !== "") query.set(key, String(value));
@@ -72,7 +76,8 @@ export async function listUsers(
     pageSize: params.pageSize,
     search: params.search,
     role: params.role,
-    isActive: params.isActive === undefined ? undefined : String(params.isActive),
+    isActive:
+      params.isActive === undefined ? undefined : String(params.isActive),
   });
   return parse(await apiFetch(`/api/admin/users${query}`));
 }
@@ -185,7 +190,9 @@ export interface AdminReviewListParams {
 export async function listAdminReviews(
   params: AdminReviewListParams = {},
 ): Promise<PagedResult<AdminReviewListItem>> {
-  return parse(await apiFetch(`/api/admin/reviews${buildQuery({ ...params })}`));
+  return parse(
+    await apiFetch(`/api/admin/reviews${buildQuery({ ...params })}`),
+  );
 }
 
 export async function updateReviewStatus(

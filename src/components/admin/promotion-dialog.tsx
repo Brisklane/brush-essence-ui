@@ -4,10 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { FormCheckbox, FormField, FormSelect } from "@/components/forms";
 import { Button, Input } from "@/components/ui";
-import {
-  createPromotion,
-  updatePromotion,
-} from "@/lib/admin-api";
+import { createPromotion, updatePromotion } from "@/lib/admin-api";
 import { listCategories, listPaintings } from "@/lib/catalog-api";
 import { cn } from "@/lib/utils";
 import type {
@@ -54,7 +51,9 @@ export function PromotionDialog({
     promotion?.paintingIds ?? [],
   );
   const [isActive, setIsActive] = useState(promotion?.isActive ?? true);
-  const [startsAt, setStartsAt] = useState(toLocalInput(promotion?.startsAt ?? null));
+  const [startsAt, setStartsAt] = useState(
+    toLocalInput(promotion?.startsAt ?? null),
+  );
   const [endsAt, setEndsAt] = useState(toLocalInput(promotion?.endsAt ?? null));
 
   const [categories, setCategories] = useState<Category[]>([]);
@@ -141,7 +140,9 @@ export function PromotionDialog({
       onSaved(saved);
       onClose();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Couldn't save the promotion.");
+      setError(
+        err instanceof Error ? err.message : "Couldn't save the promotion.",
+      );
       setSaving(false);
     }
   }
@@ -186,7 +187,11 @@ export function PromotionDialog({
             </FormSelect>
             <FormField
               id="promo-value"
-              label={discountType === "Percentage" ? "Percent off" : "Amount off (PKR)"}
+              label={
+                discountType === "Percentage"
+                  ? "Percent off"
+                  : "Amount off (PKR)"
+              }
               type="number"
               min="1"
               step="1"
@@ -290,7 +295,11 @@ export function PromotionDialog({
             Cancel
           </Button>
           <Button onClick={save} disabled={saving}>
-            {saving ? "Saving…" : promotion ? "Save changes" : "Create promotion"}
+            {saving
+              ? "Saving…"
+              : promotion
+                ? "Save changes"
+                : "Create promotion"}
           </Button>
         </div>
       </div>

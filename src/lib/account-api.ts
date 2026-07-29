@@ -11,7 +11,9 @@ async function ensureOk(response: Response): Promise<void> {
       title?: string;
     } | null;
     throw new Error(
-      problem?.detail ?? problem?.title ?? `Request failed (${response.status}).`,
+      problem?.detail ??
+        problem?.title ??
+        `Request failed (${response.status}).`,
     );
   }
 }

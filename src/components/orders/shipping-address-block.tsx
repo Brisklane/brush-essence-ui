@@ -1,9 +1,13 @@
 import type { ShippingAddress } from "@/types";
 
 /** Read-only display of a shipping address. */
-export function ShippingAddressBlock({ address }: { address: ShippingAddress }) {
+export function ShippingAddressBlock({
+  address,
+}: {
+  address: ShippingAddress;
+}) {
   return (
-    <address className="text-muted text-sm not-italic leading-relaxed">
+    <address className="text-muted text-sm leading-relaxed not-italic">
       <span className="text-foreground font-medium">{address.fullName}</span>
       <br />
       {address.line1}

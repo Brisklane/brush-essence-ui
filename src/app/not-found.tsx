@@ -14,17 +14,14 @@ export default function NotFound() {
         This page can&apos;t be found
       </h1>
       <p className="text-muted max-w-md">
-        The page you&apos;re looking for may have moved or never existed. Let&apos;s
-        get you back to the art.
+        The page you&apos;re looking for may have moved or never existed.
+        Let&apos;s get you back to the art.
       </p>
       <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
         <Link href="/gallery" className={cn(buttonVariants({}))}>
           Browse the gallery
         </Link>
-        <Link
-          href="/"
-          className={cn(buttonVariants({ variant: "outline" }))}
-        >
+        <Link href="/" className={cn(buttonVariants({ variant: "outline" }))}>
           Go home
         </Link>
       </div>

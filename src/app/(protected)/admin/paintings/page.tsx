@@ -152,9 +152,9 @@ export default function PaintingsListPage() {
         </p>
       ) : null}
 
-      <div className="mt-6 overflow-x-auto rounded-xl border border-border bg-surface">
+      <div className="border-border bg-surface mt-6 overflow-x-auto rounded-xl border">
         <table className="w-full min-w-176 text-left text-sm">
-          <thead className="border-b border-border text-muted">
+          <thead className="border-border text-muted border-b">
             <tr>
               <th className="p-3 font-medium">Image</th>
               <th className="p-3 font-medium">Title</th>
@@ -167,7 +167,7 @@ export default function PaintingsListPage() {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={6} className="p-6 text-center text-muted">
+                <td colSpan={6} className="text-muted p-6 text-center">
                   Loading…
                 </td>
               </tr>
@@ -177,7 +177,7 @@ export default function PaintingsListPage() {
                 return (
                   <tr
                     key={painting.id}
-                    className="border-b border-border last:border-0"
+                    className="border-border border-b last:border-0"
                   >
                     <td className="p-3">
                       {image ? (
@@ -188,16 +188,16 @@ export default function PaintingsListPage() {
                           className="h-12 w-12 rounded object-cover"
                         />
                       ) : (
-                        <div className="h-12 w-12 rounded bg-surface-2" />
+                        <div className="bg-surface-2 h-12 w-12 rounded" />
                       )}
                     </td>
                     <td className="text-foreground p-3 font-medium">
                       {painting.title}
                     </td>
-                    <td className="p-3 text-muted">
+                    <td className="text-muted p-3">
                       {painting.categoryName ?? "—"}
                     </td>
-                    <td className="p-3 text-muted">
+                    <td className="text-muted p-3">
                       {painting.currency} {painting.price.toFixed(2)}
                     </td>
                     <td className="p-3">
@@ -246,7 +246,7 @@ export default function PaintingsListPage() {
               })
             ) : (
               <tr>
-                <td colSpan={6} className="p-6 text-center text-muted">
+                <td colSpan={6} className="text-muted p-6 text-center">
                   No paintings yet.
                 </td>
               </tr>

@@ -50,7 +50,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
 
 function TimeChip({ value, unit }: { value: number; unit: string }) {
   return (
-    <span className="bg-white/10 rounded px-1.5 py-1 font-mono text-sm tabular-nums">
+    <span className="rounded bg-white/10 px-1.5 py-1 font-mono text-sm tabular-nums">
       {pad(value)}
       <span className="text-gold-300/80 ml-0.5 text-[0.65em]">{unit}</span>
     </span>

@@ -3,7 +3,12 @@
 import Link from "next/link";
 import { useState } from "react";
 
-import { ConfirmDialog, formatPrice, Spinner, TrashIcon } from "@/components/ui";
+import {
+  ConfirmDialog,
+  formatPrice,
+  Spinner,
+  TrashIcon,
+} from "@/components/ui";
 import { useCart } from "@/hooks/use-cart";
 import { resolveImageUrl } from "@/lib/image";
 import type { CartItem } from "@/types";
@@ -24,7 +29,9 @@ export function CartItemRow({ item }: { item: CartItem }) {
     try {
       await updateQuantity(item.paintingId, next);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Couldn't update quantity.");
+      setError(
+        err instanceof Error ? err.message : "Couldn't update quantity.",
+      );
     }
   }
 
@@ -75,7 +82,7 @@ export function CartItemRow({ item }: { item: CartItem }) {
             aria-label={`Remove ${item.title} from cart`}
             onClick={() => setConfirmOpen(true)}
             disabled={pending}
-            className="text-muted hover:text-red-600 inline-flex size-9 shrink-0 items-center justify-center rounded-md text-lg disabled:opacity-40"
+            className="text-muted inline-flex size-9 shrink-0 items-center justify-center rounded-md text-lg hover:text-red-600 disabled:opacity-40"
           >
             <TrashIcon />
           </button>

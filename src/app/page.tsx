@@ -137,8 +137,8 @@ function Hero() {
           Discover Hand-Painted Masterpieces
         </h1>
         <p className="text-muted max-w-xl text-base sm:text-lg">
-          Every canvas is an original, painted by hand and made to be lived with.
-          Find the one that belongs on your wall.
+          Every canvas is an original, painted by hand and made to be lived
+          with. Find the one that belongs on your wall.
         </p>
         <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
           <Link
@@ -221,10 +221,10 @@ function ArtistStory() {
             Painted by hand, made to last
           </h2>
           <p className="text-muted mt-4 leading-relaxed">
-            Each piece in this collection is an original oil painting on canvas —
-            no prints, no reproductions. From first sketch to final varnish, every
-            work is created by hand, capturing light, texture and emotion that a
-            screen can only hint at.
+            Each piece in this collection is an original oil painting on canvas
+            — no prints, no reproductions. From first sketch to final varnish,
+            every work is created by hand, capturing light, texture and emotion
+            that a screen can only hint at.
           </p>
           <div className="mt-6">
             <Link

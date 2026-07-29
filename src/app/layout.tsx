@@ -67,7 +67,10 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body className="flex min-h-full flex-col">
+      {/* suppressHydrationWarning: browser extensions (e.g. Grammarly) inject
+          attributes like data-gr-ext-installed onto <body> after SSR, which
+          otherwise trips React's hydration attribute check. */}
+      <body className="flex min-h-full flex-col" suppressHydrationWarning>
         <a
           href="#main-content"
           className="bg-brand-600 sr-only z-[100] rounded-md px-4 py-2 text-sm font-medium text-white focus:not-sr-only focus:absolute focus:top-3 focus:left-3"
@@ -79,7 +82,7 @@ export default function RootLayout({
             <CartProvider>
               <Header />
               <EmailVerificationBanner />
-              <main id="main-content" className="flex-1">
+              <main id="main-content" className="flex flex-1 flex-col">
                 {children}
               </main>
               <Footer />

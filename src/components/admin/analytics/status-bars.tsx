@@ -33,7 +33,10 @@ export function StatusBars({ items }: { items: StatusBarItem[] }) {
             </div>
             <div className="bg-surface-2 h-2 overflow-hidden rounded-full">
               <div
-                className={cn("h-full rounded-full", item.colorClass ?? "bg-brand-500")}
+                className={cn(
+                  "h-full rounded-full",
+                  item.colorClass ?? "bg-brand-500",
+                )}
                 style={{ width: `${pct}%` }}
               />
             </div>

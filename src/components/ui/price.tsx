@@ -53,14 +53,21 @@ export function PriceTag({
 
   if (!onSale) {
     return (
-      <span className={cn("text-foreground inline-block font-semibold", className)}>
+      <span
+        className={cn("text-foreground inline-block font-semibold", className)}
+      >
         {formatPrice(price, currency)}
       </span>
     );
   }
 
   return (
-    <span className={cn("flex items-baseline gap-2", className)}>
+    <span
+      className={cn(
+        "flex flex-wrap items-baseline gap-x-2 gap-y-0.5",
+        className,
+      )}
+    >
       <span className="text-muted-2 text-[0.7em] font-normal line-through">
         {formatPrice(price, currency)}
       </span>

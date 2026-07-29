@@ -103,7 +103,11 @@ export function CustomRequestForm({
         <p className="text-muted mt-1 mb-3 text-sm">
           Share photos or inspiration to help guide the piece.
         </p>
-        <ImageUpload value={images} onChange={setImages} disabled={submitting} />
+        <ImageUpload
+          value={images}
+          onChange={setImages}
+          disabled={submitting}
+        />
       </div>
 
       <Button type="submit" size="lg" disabled={submitting} className="mt-1">

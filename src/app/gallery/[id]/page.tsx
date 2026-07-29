@@ -208,14 +208,19 @@ export default async function PaintingPage({ params }: PageProps) {
             )}
 
             <dl className="mt-6 grid grid-cols-2 gap-4 text-sm">
-              <Spec label="Medium" value={painting.mediumName ?? "Oil on canvas"} />
+              <Spec
+                label="Medium"
+                value={painting.mediumName ?? "Oil on canvas"}
+              />
               <Spec
                 label="Dimensions"
                 value={formatDimensions(painting.widthCm, painting.heightCm)}
               />
               <Spec
                 label="Availability"
-                value={soldOut ? "Sold out" : `${painting.stockQuantity} in stock`}
+                value={
+                  soldOut ? "Sold out" : `${painting.stockQuantity} in stock`
+                }
               />
             </dl>
 

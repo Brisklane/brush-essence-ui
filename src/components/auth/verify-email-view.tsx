@@ -43,7 +43,7 @@ export function VerifyEmailView() {
 
   if (state === "verifying") {
     return (
-      <div className="flex items-center gap-3 text-muted">
+      <div className="text-muted flex items-center gap-3">
         <Spinner className="size-5" />
         <span>Verifying your email…</span>
       </div>
@@ -77,8 +77,8 @@ export function VerifyEmailView() {
         <p className="text-muted mt-1 text-sm">{message}</p>
       </div>
       <p className="text-muted text-sm">
-        Signed in? You can request a fresh link from the banner at the top of the
-        page. Otherwise{" "}
+        Signed in? You can request a fresh link from the banner at the top of
+        the page. Otherwise{" "}
         <Link href="/login" className="text-brand-700 hover:text-brand-800">
           sign in
         </Link>{" "}

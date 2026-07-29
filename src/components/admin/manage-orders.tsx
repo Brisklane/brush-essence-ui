@@ -23,7 +23,9 @@ function formatDate(iso: string): string {
 }
 
 export function ManageOrders() {
-  const [data, setData] = useState<PagedResult<AdminOrderListItem> | null>(null);
+  const [data, setData] = useState<PagedResult<AdminOrderListItem> | null>(
+    null,
+  );
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -48,7 +50,9 @@ export function ManageOrders() {
       })
       .catch((err: unknown) => {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Couldn't load orders.");
+          setError(
+            err instanceof Error ? err.message : "Couldn't load orders.",
+          );
         }
       })
       .finally(() => {
@@ -67,7 +71,9 @@ export function ManageOrders() {
           ? {
               ...current,
               items: current.items.map((item) =>
-                item.id === order.id ? { ...item, status: updated.status } : item,
+                item.id === order.id
+                  ? { ...item, status: updated.status }
+                  : item,
               ),
             }
           : current,
@@ -129,7 +135,9 @@ export function ManageOrders() {
               data.items.map((order) => (
                 <tr key={order.id} className="hover:bg-surface-2/50">
                   <td className="px-4 py-3 font-medium">{order.orderNumber}</td>
-                  <td className="text-muted px-4 py-3">{order.customerEmail}</td>
+                  <td className="text-muted px-4 py-3">
+                    {order.customerEmail}
+                  </td>
                   <td className="text-muted px-4 py-3">
                     {formatDate(order.createdAt)}
                   </td>

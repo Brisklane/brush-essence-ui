@@ -17,7 +17,7 @@ const exploreLinks = [
  */
 export function Footer() {
   return (
-    <footer className="bg-brand-950 mt-auto text-brand-100">
+    <footer className="bg-brand-950 text-brand-100 mt-auto">
       {/* Gold hairline rule across the top. */}
       <div className="from-gold-500/0 via-gold-500/70 to-gold-500/0 h-px bg-linear-to-r" />
 
@@ -31,7 +31,7 @@ export function Footer() {
               Original Oil Paintings
             </span>
           </Link>
-          <p className="max-w-xs text-sm text-brand-200/80">
+          <p className="text-brand-200/80 max-w-xs text-sm">
             {siteConfig.description}
           </p>
         </div>
@@ -60,15 +60,15 @@ export function Footer() {
         </FooterColumn>
       </Container>
 
-      <div className="border-t border-brand-800/60">
-        <Container className="flex flex-col items-center justify-between gap-2 py-6 text-sm text-brand-200/70 sm:flex-row">
+      <div className="border-brand-800/60 border-t">
+        <Container className="text-brand-200/70 flex flex-col items-center justify-between gap-2 py-6 text-sm sm:flex-row">
           <p>
             © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
           </p>
           <div className="flex items-center gap-3">
             <Link
               href="/support"
-              className="font-medium transition-colors hover:text-gold-300"
+              className="hover:text-gold-300 font-medium transition-colors"
             >
               Support
             </Link>
@@ -114,7 +114,7 @@ function FooterLink({
       <Link
         href={href}
         {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-        className="text-sm text-brand-200/80 transition-colors hover:text-gold-300"
+        className="text-brand-200/80 hover:text-gold-300 text-sm transition-colors"
       >
         {children}
       </Link>

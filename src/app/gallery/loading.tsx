@@ -11,7 +11,10 @@ export default function GalleryLoading() {
 
         <div className="mt-8 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
           {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="border-border bg-surface overflow-hidden rounded-xl border">
+            <div
+              key={i}
+              className="border-border bg-surface overflow-hidden rounded-xl border"
+            >
               <Skeleton className="aspect-4/5 rounded-none" />
               <div className="p-4">
                 <Skeleton className="h-5 w-3/4" />

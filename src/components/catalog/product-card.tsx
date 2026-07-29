@@ -34,7 +34,7 @@ export function ProductCard({ painting }: { painting: Painting }) {
         )}
 
         {/* Gold inner frame to evoke a hung, framed painting. */}
-        <span className="ring-gold-500/20 group-hover:ring-gold-500/40 pointer-events-none absolute inset-0 rounded-none ring-1 ring-inset transition-colors" />
+        <span className="ring-gold-500/20 group-hover:ring-gold-500/40 pointer-events-none absolute inset-0 rounded-none ring-1 transition-colors ring-inset" />
 
         {!soldOut &&
         painting.discountedPrice != null &&
@@ -65,7 +65,7 @@ export function ProductCard({ painting }: { painting: Painting }) {
         <h3 className="font-display text-foreground line-clamp-1 text-xl font-semibold tracking-normal">
           <Link
             href={href}
-            className="transition-colors hover:text-brand-700 dark:hover:text-gold-300"
+            className="hover:text-brand-700 dark:hover:text-gold-300 transition-colors"
           >
             {painting.title}
           </Link>
@@ -77,7 +77,9 @@ export function ProductCard({ painting }: { painting: Painting }) {
         {painting.ratingCount > 0 ? (
           <div className="mt-2 flex items-center gap-1.5">
             <StarRating value={painting.averageRating} size="sm" />
-            <span className="text-muted-2 text-xs">({painting.ratingCount})</span>
+            <span className="text-muted-2 text-xs">
+              ({painting.ratingCount})
+            </span>
           </div>
         ) : null}
 

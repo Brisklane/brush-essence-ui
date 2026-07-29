@@ -1,13 +1,29 @@
 import { z } from "zod";
 
-// Mirrors the API's password policy (FluentValidation): ≥8 chars, upper/lower/digit.
+/**
+ * Password rules (must mirror the API's FluentValidation policy):
+ * ≥8 characters, one uppercase, one lowercase, one digit, one special character.
+ * Exported so the register/reset forms can show a live checklist.
+ */
+export const passwordRequirements: {
+  label: string;
+  test: (value: string) => boolean;
+}[] = [
+  { label: "At least 8 characters", test: (v) => v.length >= 8 },
+  { label: "One uppercase letter", test: (v) => /[A-Z]/.test(v) },
+  { label: "One lowercase letter", test: (v) => /[a-z]/.test(v) },
+  { label: "One number", test: (v) => /[0-9]/.test(v) },
+  { label: "One special character", test: (v) => /[^A-Za-z0-9]/.test(v) },
+];
+
 const password = z
   .string()
   .min(8, "Password must be at least 8 characters.")
   .max(128, "Password is too long.")
   .regex(/[A-Z]/, "Include an uppercase letter.")
   .regex(/[a-z]/, "Include a lowercase letter.")
-  .regex(/[0-9]/, "Include a digit.");
+  .regex(/[0-9]/, "Include a number.")
+  .regex(/[^A-Za-z0-9]/, "Include a special character.");
 
 export const loginSchema = z.object({
   email: z.email("Enter a valid email address."),

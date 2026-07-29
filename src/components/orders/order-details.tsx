@@ -69,10 +69,7 @@ export function OrderDetails({ orderId }: { orderId: string }) {
 
   return (
     <div>
-      <Link
-        href="/orders"
-        className="text-muted hover:text-foreground text-sm"
-      >
+      <Link href="/orders" className="text-muted hover:text-foreground text-sm">
         ← Your orders
       </Link>
 

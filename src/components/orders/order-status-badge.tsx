@@ -1,5 +1,8 @@
 import { Badge } from "@/components/ui";
-import { ORDER_STATUS_LABELS, orderStatusBadgeVariant } from "@/lib/order-status";
+import {
+  ORDER_STATUS_LABELS,
+  orderStatusBadgeVariant,
+} from "@/lib/order-status";
 import type { OrderStatus } from "@/types";
 
 export function OrderStatusBadge({

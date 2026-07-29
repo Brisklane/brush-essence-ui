@@ -19,7 +19,9 @@ async function parseCart(response: Response): Promise<Cart> {
       title?: string;
     } | null;
     throw new Error(
-      problem?.detail ?? problem?.title ?? `Request failed (${response.status}).`,
+      problem?.detail ??
+        problem?.title ??
+        `Request failed (${response.status}).`,
     );
   }
   return response.json() as Promise<Cart>;

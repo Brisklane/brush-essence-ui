@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef } from "react";
 
-import { Button, Input } from "@/components/ui";
-import type { Category } from "@/types";
+import { Input } from "@/components/ui";
+import type { Category, Medium } from "@/types";
 
 export interface PriceRange {
   min: string;
@@ -14,27 +14,66 @@ interface CatalogFiltersProps {
   categories: Category[];
   selectedCategoryIds: string[];
   onToggleCategory: (id: string) => void;
+  mediums: Medium[];
+  selectedMediumIds: string[];
+  onToggleMedium: (id: string) => void;
   price: PriceRange;
   onApplyPrice: (price: PriceRange) => void;
   onClearAll: () => void;
   hasActiveFilters: boolean;
 }
 
-/** Category checkboxes + price-range inputs. Used in the sidebar and the
- * mobile filter drawer. Fully controlled by the parent CatalogView. */
+const PRICE_DEBOUNCE_MS = 500;
+
+/**
+ * Category + medium checkboxes and an instant (debounced) price range. Fully
+ * controlled by the parent CatalogView. Price inputs are uncontrolled (refs) so
+ * committing a debounced value never steals focus mid-typing.
+ */
 export function CatalogFilters({
   categories,
   selectedCategoryIds,
   onToggleCategory,
+  mediums,
+  selectedMediumIds,
+  onToggleMedium,
   price,
   onApplyPrice,
   onClearAll,
   hasActiveFilters,
 }: CatalogFiltersProps) {
-  // Local draft so users can type a range and commit it on "Apply". The parent
-  // remounts this component (via `key`) when the committed price changes
-  // externally, which re-seeds the draft — no effect synchronisation needed.
-  const [draft, setDraft] = useState<PriceRange>(price);
+  const minRef = useRef<HTMLInputElement>(null);
+  const maxRef = useRef<HTMLInputElement>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Adopt external price changes (e.g. "Clear all") without overwriting a field
+  // the user is actively editing. DOM writes only — no React state involved.
+  useEffect(() => {
+    const min = minRef.current;
+    const max = maxRef.current;
+    if (min && document.activeElement !== min && min.value !== price.min) {
+      min.value = price.min;
+    }
+    if (max && document.activeElement !== max && max.value !== price.max) {
+      max.value = price.max;
+    }
+  }, [price.min, price.max]);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
+
+  function schedulePriceApply() {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
+      onApplyPrice({
+        min: (minRef.current?.value ?? "").trim(),
+        max: (maxRef.current?.value ?? "").trim(),
+      });
+    }, PRICE_DEBOUNCE_MS);
+  }
 
   return (
     <div className="space-y-8">
@@ -53,68 +92,92 @@ export function CatalogFilters({
         ) : null}
       </div>
 
-      <section>
-        <h3 className="text-muted mb-3 text-xs font-semibold tracking-wider uppercase">
-          Category
-        </h3>
-        {categories.length === 0 ? (
-          <p className="text-muted-2 text-sm">No categories yet.</p>
-        ) : (
-          <ul className="space-y-2">
-            {categories.map((category) => (
-              <li key={category.id}>
-                <label className="text-foreground flex cursor-pointer items-center gap-3 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={selectedCategoryIds.includes(category.id)}
-                    onChange={() => onToggleCategory(category.id)}
-                    className="accent-brand-600 size-4 rounded"
-                  />
-                  <span>{category.name}</span>
-                </label>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+      <FilterCheckboxSection
+        title="Category"
+        items={categories}
+        selectedIds={selectedCategoryIds}
+        onToggle={onToggleCategory}
+        emptyLabel="No categories yet."
+      />
+
+      <FilterCheckboxSection
+        title="Medium"
+        items={mediums}
+        selectedIds={selectedMediumIds}
+        onToggle={onToggleMedium}
+        emptyLabel="No mediums yet."
+      />
 
       <section>
         <h3 className="text-muted mb-3 text-xs font-semibold tracking-wider uppercase">
           Price range
         </h3>
-        <form
-          className="space-y-3"
-          onSubmit={(e) => {
-            e.preventDefault();
-            onApplyPrice(draft);
-          }}
-        >
-          <div className="flex items-center gap-2">
-            <Input
-              type="number"
-              inputMode="numeric"
-              min={0}
-              placeholder="Min"
-              aria-label="Minimum price"
-              value={draft.min}
-              onChange={(e) => setDraft((d) => ({ ...d, min: e.target.value }))}
-            />
-            <span className="text-muted-2">–</span>
-            <Input
-              type="number"
-              inputMode="numeric"
-              min={0}
-              placeholder="Max"
-              aria-label="Maximum price"
-              value={draft.max}
-              onChange={(e) => setDraft((d) => ({ ...d, max: e.target.value }))}
-            />
-          </div>
-          <Button type="submit" variant="outline" size="sm" className="w-full">
-            Apply price
-          </Button>
-        </form>
+        <div className="flex items-center gap-2">
+          <Input
+            ref={minRef}
+            type="number"
+            inputMode="numeric"
+            min={0}
+            placeholder="Min"
+            aria-label="Minimum price"
+            defaultValue={price.min}
+            onChange={schedulePriceApply}
+          />
+          <span className="text-muted-2">–</span>
+          <Input
+            ref={maxRef}
+            type="number"
+            inputMode="numeric"
+            min={0}
+            placeholder="Max"
+            aria-label="Maximum price"
+            defaultValue={price.max}
+            onChange={schedulePriceApply}
+          />
+        </div>
       </section>
     </div>
+  );
+}
+
+/** A titled list of checkboxes — shared by the Category and Medium sections. */
+function FilterCheckboxSection({
+  title,
+  items,
+  selectedIds,
+  onToggle,
+  emptyLabel,
+}: {
+  title: string;
+  items: { id: string; name: string }[];
+  selectedIds: string[];
+  onToggle: (id: string) => void;
+  emptyLabel: string;
+}) {
+  return (
+    <section>
+      <h3 className="text-muted mb-3 text-xs font-semibold tracking-wider uppercase">
+        {title}
+      </h3>
+      {items.length === 0 ? (
+        <p className="text-muted-2 text-sm">{emptyLabel}</p>
+      ) : (
+        <ul className="space-y-2">
+          {items.map((item) => (
+            <li key={item.id}>
+              <label className="text-foreground flex cursor-pointer items-center gap-3 text-sm">
+                <input
+                  type="checkbox"
+                  checked={selectedIds.includes(item.id)}
+                  onChange={() => onToggle(item.id)}
+                  className="accent-brand-600 size-4 rounded"
+                />
+                <span>{item.name}</span>
+              </label>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
   );
 }

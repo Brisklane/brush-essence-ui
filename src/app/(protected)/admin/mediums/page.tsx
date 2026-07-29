@@ -30,7 +30,9 @@ export default function MediumsPage() {
       .catch((caught) => {
         if (!cancelled) {
           setError(
-            caught instanceof Error ? caught.message : "Failed to load mediums.",
+            caught instanceof Error
+              ? caught.message
+              : "Failed to load mediums.",
           );
         }
       })
@@ -94,10 +96,13 @@ export default function MediumsPage() {
 
       <form
         onSubmit={handleAdd}
-        className="mt-6 flex max-w-xl flex-col gap-3 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:items-end"
+        className="border-border bg-surface mt-6 flex max-w-xl flex-col gap-3 rounded-xl border p-4 sm:flex-row sm:items-end"
       >
         <div className="flex flex-1 flex-col gap-1.5">
-          <label htmlFor="med-name" className="text-foreground text-sm font-medium">
+          <label
+            htmlFor="med-name"
+            className="text-foreground text-sm font-medium"
+          >
             Name
           </label>
           <Input
@@ -118,9 +123,9 @@ export default function MediumsPage() {
         </p>
       ) : null}
 
-      <div className="mt-6 overflow-x-auto rounded-xl border border-border bg-surface">
+      <div className="border-border bg-surface mt-6 overflow-x-auto rounded-xl border">
         <table className="w-full min-w-96 text-left text-sm">
-          <thead className="border-b border-border text-muted">
+          <thead className="border-border text-muted border-b">
             <tr>
               <th className="p-3 font-medium">Name</th>
               <th className="p-3 text-right font-medium">Actions</th>
@@ -129,7 +134,7 @@ export default function MediumsPage() {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={2} className="p-6 text-center text-muted">
+                <td colSpan={2} className="text-muted p-6 text-center">
                   Loading…
                 </td>
               </tr>
@@ -137,7 +142,7 @@ export default function MediumsPage() {
               mediums.map((medium) => (
                 <tr
                   key={medium.id}
-                  className="border-b border-border last:border-0"
+                  className="border-border border-b last:border-0"
                 >
                   <td className="text-foreground p-3 font-medium">
                     {medium.name}
@@ -155,7 +160,7 @@ export default function MediumsPage() {
               ))
             ) : (
               <tr>
-                <td colSpan={2} className="p-6 text-center text-muted">
+                <td colSpan={2} className="text-muted p-6 text-center">
                   No mediums yet.
                 </td>
               </tr>

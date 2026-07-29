@@ -32,7 +32,11 @@ export function CartView() {
     return (
       <div className="py-16 text-center">
         <p className="text-muted">We couldn&apos;t load your cart.</p>
-        <Button variant="outline" className="mt-4" onClick={() => void refresh()}>
+        <Button
+          variant="outline"
+          className="mt-4"
+          onClick={() => void refresh()}
+        >
           Try again
         </Button>
       </div>
@@ -71,7 +75,7 @@ export function CartView() {
             type="button"
             onClick={() => setConfirmClear(true)}
             disabled={isMutating}
-            className="text-muted hover:text-red-600 text-sm font-medium disabled:opacity-40"
+            className="text-muted text-sm font-medium hover:text-red-600 disabled:opacity-40"
           >
             Clear cart
           </button>

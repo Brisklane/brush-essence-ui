@@ -25,7 +25,9 @@ import { ReviewEditDialog } from "./review-edit-dialog";
 
 const STATUSES: ReviewStatus[] = ["Pending", "Approved", "Rejected"];
 
-function statusVariant(status: ReviewStatus): NonNullable<BadgeProps["variant"]> {
+function statusVariant(
+  status: ReviewStatus,
+): NonNullable<BadgeProps["variant"]> {
   return status === "Approved"
     ? "success"
     : status === "Rejected"
@@ -40,7 +42,9 @@ function formatDate(iso: string): string {
 }
 
 export function ManageReviews() {
-  const [data, setData] = useState<PagedResult<AdminReviewListItem> | null>(null);
+  const [data, setData] = useState<PagedResult<AdminReviewListItem> | null>(
+    null,
+  );
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<string | null>(null);
@@ -67,7 +71,9 @@ export function ManageReviews() {
       })
       .catch((err: unknown) => {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Couldn't load reviews.");
+          setError(
+            err instanceof Error ? err.message : "Couldn't load reviews.",
+          );
         }
       })
       .finally(() => {

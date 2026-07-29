@@ -56,7 +56,11 @@ export function StarRating({
       <div
         role="radiogroup"
         aria-label={label}
-        className={cn("inline-flex items-center gap-1", sizeClass[size], className)}
+        className={cn(
+          "inline-flex items-center gap-1",
+          sizeClass[size],
+          className,
+        )}
         onMouseLeave={() => setHover(null)}
       >
         {[1, 2, 3, 4, 5].map((star) => (
@@ -71,7 +75,9 @@ export function StarRating({
             onClick={() => onChange(star)}
             className={cn(
               "transition-colors",
-              star <= active ? "text-gold-500" : "text-muted-2 hover:text-gold-400",
+              star <= active
+                ? "text-gold-500"
+                : "text-muted-2 hover:text-gold-400",
             )}
           >
             <Star />

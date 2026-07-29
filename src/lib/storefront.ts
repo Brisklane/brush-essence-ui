@@ -1,5 +1,5 @@
 import { env } from "@/lib/env";
-import type { Category, PagedResult, Painting } from "@/types";
+import type { Category, Medium, PagedResult, Painting } from "@/types";
 
 /**
  * Public storefront catalogue client. Unlike `catalog-api.ts` (admin, attaches
@@ -37,6 +37,7 @@ export interface CatalogParams {
   pageSize?: number;
   search?: string;
   categoryIds?: string[];
+  mediumIds?: string[];
   minPrice?: number;
   maxPrice?: number;
   sort?: PaintingSort;
@@ -51,6 +52,7 @@ function buildCatalogQuery(params: CatalogParams): string {
   if (params.maxPrice != null) query.set("maxPrice", String(params.maxPrice));
   if (params.sort) query.set("sort", params.sort);
   for (const id of params.categoryIds ?? []) query.append("categoryIds", id);
+  for (const id of params.mediumIds ?? []) query.append("mediumIds", id);
   return query.toString();
 }
 
@@ -70,9 +72,7 @@ export function fetchCatalog(
   params: CatalogParams = {},
 ): Promise<PagedResult<Painting>> {
   const qs = buildCatalogQuery(params);
-  return getJson<PagedResult<Painting>>(
-    `/api/paintings${qs ? `?${qs}` : ""}`,
-  );
+  return getJson<PagedResult<Painting>>(`/api/paintings${qs ? `?${qs}` : ""}`);
 }
 
 /** Returns a single painting, or `null` when it is missing/unpublished (404). */
@@ -90,4 +90,8 @@ export async function fetchPainting(id: string): Promise<Painting | null> {
 
 export function fetchCategories(): Promise<Category[]> {
   return getJson<Category[]>("/api/categories");
+}
+
+export function fetchMediums(): Promise<Medium[]> {
+  return getJson<Medium[]>("/api/mediums");
 }

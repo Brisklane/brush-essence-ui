@@ -20,10 +20,7 @@ export default function CustomRequestsPage() {
           <h1 className="font-display text-foreground text-3xl font-semibold tracking-tight sm:text-4xl">
             Custom requests
           </h1>
-          <Link
-            href="/custom-requests/new"
-            className={cn(buttonVariants({}))}
-          >
+          <Link href="/custom-requests/new" className={cn(buttonVariants({}))}>
             <PlusIcon /> New request
           </Link>
         </div>

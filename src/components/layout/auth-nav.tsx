@@ -16,7 +16,7 @@ export function AuthNav() {
   if (status === "loading") {
     return (
       <div
-        className="h-9 w-20 animate-pulse rounded-md bg-surface-2"
+        className="bg-surface-2 h-9 w-20 animate-pulse rounded-md"
         aria-hidden
       />
     );

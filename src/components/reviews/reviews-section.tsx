@@ -6,11 +6,7 @@ import { useEffect, useState } from "react";
 
 import { Button, Spinner } from "@/components/ui";
 import { useAuth } from "@/hooks/use-auth";
-import {
-  getMyReview,
-  getReviewSummary,
-  listReviews,
-} from "@/lib/reviews-api";
+import { getMyReview, getReviewSummary, listReviews } from "@/lib/reviews-api";
 import { cn } from "@/lib/utils";
 import type { PagedResult, Review, ReviewSummary } from "@/types";
 
@@ -110,7 +106,9 @@ export function ReviewsSection({ paintingId }: { paintingId: string }) {
                           style={{ width: `${pct}%` }}
                         />
                       </span>
-                      <span className="text-muted-2 w-6 text-right">{count}</span>
+                      <span className="text-muted-2 w-6 text-right">
+                        {count}
+                      </span>
                     </li>
                   );
                 })}

@@ -10,7 +10,7 @@ export default function LoginPage() {
     <div className="flex flex-col gap-6">
       <div>
         <h1 className="text-foreground text-2xl font-semibold">Welcome back</h1>
-        <p className="mt-1 text-sm text-muted">Sign in to your account.</p>
+        <p className="text-muted mt-1 text-sm">Sign in to your account.</p>
       </div>
       {/* useSearchParams (redirect) requires a Suspense boundary. */}
       <Suspense fallback={null}>

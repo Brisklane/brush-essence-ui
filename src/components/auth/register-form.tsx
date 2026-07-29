@@ -4,13 +4,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 
 import { Button } from "@/components/ui";
 import { useAuth } from "@/hooks/use-auth";
-import { registerSchema, type RegisterValues } from "@/lib/validations/auth";
+import {
+  passwordRequirements,
+  registerSchema,
+  type RegisterValues,
+} from "@/lib/validations/auth";
 
-import { FormField } from "@/components/forms";
+import { FormField, PasswordField } from "@/components/forms";
 
 export function RegisterForm() {
   const { register: registerUser } = useAuth();
@@ -20,8 +24,12 @@ export function RegisterForm() {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<RegisterValues>({ resolver: zodResolver(registerSchema) });
+
+  const passwordValue = useWatch({ control, name: "password" }) ?? "";
+  const confirmValue = useWatch({ control, name: "confirmPassword" }) ?? "";
 
   async function onSubmit(values: RegisterValues) {
     setFormError(null);
@@ -66,30 +74,60 @@ export function RegisterForm() {
         error={errors.email?.message}
         {...register("email")}
       />
-      <FormField
-        id="password"
-        label="Password"
-        type="password"
-        autoComplete="new-password"
-        error={errors.password?.message}
-        {...register("password")}
-      />
-      <FormField
-        id="confirmPassword"
-        label="Confirm password"
-        type="password"
-        autoComplete="new-password"
-        error={errors.confirmPassword?.message}
-        {...register("confirmPassword")}
-      />
+      <div>
+        <PasswordField
+          id="password"
+          label="Password"
+          autoComplete="new-password"
+          {...register("password")}
+        />
+        <ul className="mt-2 grid grid-cols-1 gap-1 text-xs sm:grid-cols-2">
+          {passwordRequirements.map((requirement) => {
+            const met = requirement.test(passwordValue);
+            return (
+              <li
+                key={requirement.label}
+                className={
+                  met ? "text-green-600 dark:text-green-400" : "text-muted"
+                }
+              >
+                <span aria-hidden>{met ? "✓" : "○"}</span> {requirement.label}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+
+      <div>
+        <PasswordField
+          id="confirmPassword"
+          label="Confirm password"
+          autoComplete="new-password"
+          {...register("confirmPassword")}
+        />
+        {confirmValue.length > 0 ? (
+          passwordValue === confirmValue ? (
+            <p className="mt-1.5 text-xs text-green-600 dark:text-green-400">
+              Passwords match
+            </p>
+          ) : (
+            <p className="mt-1.5 text-xs text-red-600 dark:text-red-400">
+              Passwords do not match
+            </p>
+          )
+        ) : null}
+      </div>
 
       <Button type="submit" disabled={isSubmitting}>
         {isSubmitting ? "Creating account…" : "Create account"}
       </Button>
 
-      <p className="text-center text-sm text-muted">
+      <p className="text-muted text-center text-sm">
         Already have an account?{" "}
-        <Link href="/login" className="text-brand-700 hover:text-brand-800">
+        <Link
+          href="/login"
+          className="text-brand-700 hover:text-brand-800 dark:text-brand-300 dark:hover:text-brand-200 font-medium"
+        >
           Sign in
         </Link>
       </p>

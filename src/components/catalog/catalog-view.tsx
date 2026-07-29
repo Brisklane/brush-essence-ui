@@ -13,10 +13,11 @@ import {
 import {
   fetchCatalog,
   fetchCategories,
+  fetchMediums,
   isPaintingSort,
   type PaintingSort,
 } from "@/lib/storefront";
-import type { Category, PagedResult, Painting } from "@/types";
+import type { Category, Medium, PagedResult, Painting } from "@/types";
 
 import { CatalogFilters, type PriceRange } from "./catalog-filters";
 import { Pagination } from "./pagination";
@@ -28,6 +29,7 @@ const PAGE_SIZE = 12;
 interface CatalogState {
   search: string;
   categoryIds: string[];
+  mediumIds: string[];
   min: string;
   max: string;
   sort: PaintingSort;
@@ -37,9 +39,11 @@ interface CatalogState {
 function parseState(params: URLSearchParams): CatalogState {
   const sort = params.get("sort");
   const categories = params.get("categories");
+  const mediums = params.get("mediums");
   return {
     search: params.get("search") ?? "",
     categoryIds: categories ? categories.split(",").filter(Boolean) : [],
+    mediumIds: mediums ? mediums.split(",").filter(Boolean) : [],
     min: params.get("min") ?? "",
     max: params.get("max") ?? "",
     sort: isPaintingSort(sort) ? sort : "newest",
@@ -52,6 +56,7 @@ function toQueryString(state: CatalogState): string {
   if (state.search) params.set("search", state.search);
   if (state.categoryIds.length)
     params.set("categories", state.categoryIds.join(","));
+  if (state.mediumIds.length) params.set("mediums", state.mediumIds.join(","));
   if (state.min) params.set("min", state.min);
   if (state.max) params.set("max", state.max);
   if (state.sort !== "newest") params.set("sort", state.sort);
@@ -70,6 +75,7 @@ export function CatalogView() {
   );
 
   const [categories, setCategories] = useState<Category[]>([]);
+  const [mediums, setMediums] = useState<Medium[]>([]);
   const [result, setResult] = useState<PagedResult<Painting> | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -80,6 +86,9 @@ export function CatalogView() {
     fetchCategories()
       .then(setCategories)
       .catch(() => setCategories([]));
+    fetchMediums()
+      .then(setMediums)
+      .catch(() => setMediums([]));
   }, []);
 
   // Re-fetch the catalogue whenever the effective query changes. State updates
@@ -98,6 +107,7 @@ export function CatalogView() {
           pageSize: PAGE_SIZE,
           search: state.search || undefined,
           categoryIds: state.categoryIds.length ? state.categoryIds : undefined,
+          mediumIds: state.mediumIds.length ? state.mediumIds : undefined,
           minPrice: state.min ? Number(state.min) : undefined,
           maxPrice: state.max ? Number(state.max) : undefined,
           sort: state.sort,
@@ -138,6 +148,13 @@ export function CatalogView() {
         : [...state.categoryIds, id],
     });
 
+  const toggleMedium = (id: string) =>
+    commit({
+      mediumIds: state.mediumIds.includes(id)
+        ? state.mediumIds.filter((m) => m !== id)
+        : [...state.mediumIds, id],
+    });
+
   const applyPrice = (price: PriceRange) =>
     commit({ min: price.min.trim(), max: price.max.trim() });
 
@@ -151,16 +168,18 @@ export function CatalogView() {
   const hasActiveFilters =
     !!state.search ||
     state.categoryIds.length > 0 ||
+    state.mediumIds.length > 0 ||
     !!state.min ||
     !!state.max;
 
   const filters = (
     <CatalogFilters
-      // Re-seed the price draft when the committed range changes externally.
-      key={`${state.min}|${state.max}`}
       categories={categories}
       selectedCategoryIds={state.categoryIds}
       onToggleCategory={toggleCategory}
+      mediums={mediums}
+      selectedMediumIds={state.mediumIds}
+      onToggleMedium={toggleMedium}
       price={{ min: state.min, max: state.max }}
       onApplyPrice={applyPrice}
       onClearAll={clearAll}
@@ -198,7 +217,10 @@ export function CatalogView() {
                 <span className="bg-brand-600 size-2 rounded-full" />
               ) : null}
             </Button>
-            <SortSelect value={state.sort} onChange={(sort) => commit({ sort })} />
+            <SortSelect
+              value={state.sort}
+              onChange={(sort) => commit({ sort })}
+            />
           </div>
         </div>
 
@@ -223,7 +245,9 @@ export function CatalogView() {
         ) : loading && !result ? (
           <ProductGridSkeleton count={PAGE_SIZE} />
         ) : result && result.items.length > 0 ? (
-          <div className={loading ? "opacity-60 transition-opacity" : undefined}>
+          <div
+            className={loading ? "opacity-60 transition-opacity" : undefined}
+          >
             <ProductGrid paintings={result.items} />
           </div>
         ) : (
@@ -278,7 +302,10 @@ export function CatalogView() {
               </button>
             </div>
             {filters}
-            <Button className="mt-8 w-full" onClick={() => setDrawerOpen(false)}>
+            <Button
+              className="mt-8 w-full"
+              onClick={() => setDrawerOpen(false)}
+            >
               Show results
             </Button>
           </div>

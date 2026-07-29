@@ -38,7 +38,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="flex flex-col sm:flex-row">
+    <div className="flex flex-1 flex-col sm:flex-row">
       <AdminSidebar />
       <div className="min-w-0 flex-1">{children}</div>
     </div>

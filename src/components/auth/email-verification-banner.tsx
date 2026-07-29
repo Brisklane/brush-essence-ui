@@ -33,7 +33,9 @@ export function EmailVerificationBanner() {
       await resendVerification();
       setSent(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Couldn't send. Try again.");
+      setError(
+        err instanceof Error ? err.message : "Couldn't send. Try again.",
+      );
     } finally {
       setSending(false);
     }

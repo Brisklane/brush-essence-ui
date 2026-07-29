@@ -28,7 +28,7 @@ export default function EditPaintingPage() {
       {error ? (
         <p className="mt-4 text-red-700">{error}</p>
       ) : !painting ? (
-        <p className="mt-4 text-muted">Loading…</p>
+        <p className="text-muted mt-4">Loading…</p>
       ) : (
         <div className="mt-6">
           <PaintingForm painting={painting} />

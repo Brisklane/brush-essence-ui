@@ -17,7 +17,7 @@ interface UserEditDialogProps {
   onSaved: (user: AdminUser) => void;
 }
 
-/** Modal for toggling a user's active state and roles. */
+/** Modal for setting a user's (single) role and their active state. */
 export function UserEditDialog({
   user,
   isSelf,
@@ -25,21 +25,19 @@ export function UserEditDialog({
   onSaved,
 }: UserEditDialogProps) {
   const [isActive, setIsActive] = useState(user.isActive);
-  const [roles, setRoles] = useState<string[]>(user.roles);
+  // A user has exactly one role. Prefer Admin if they currently hold it.
+  const [role, setRole] = useState<string>(
+    user.roles.includes("Admin") ? "Admin" : (user.roles[0] ?? "Customer"),
+  );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  function toggleRole(role: string, checked: boolean) {
-    setRoles((current) =>
-      checked ? [...new Set([...current, role])] : current.filter((r) => r !== role),
-    );
-  }
 
   async function save() {
     setSaving(true);
     setError(null);
     try {
-      const updated = await updateUser(user.id, { isActive, roles });
+      // Send just the selected role — the API replaces the user's roles with it.
+      const updated = await updateUser(user.id, { isActive, roles: [role] });
       onSaved(updated);
       onClose();
     } catch (err) {
@@ -66,23 +64,32 @@ export function UserEditDialog({
 
         <div className="mt-5 space-y-4">
           <div>
-            <p className="text-foreground text-sm font-medium">Roles</p>
+            <p className="text-foreground text-sm font-medium">Role</p>
             <div className="mt-2 space-y-2">
-              {ALL_ROLES.map((role) => {
-                // An admin must not strip their own Admin role.
-                const locked = isSelf && role === "Admin";
-                return (
-                  <FormCheckbox
-                    key={role}
-                    id={`role-${role}`}
-                    label={locked ? `${role} (you)` : role}
-                    checked={roles.includes(role)}
-                    disabled={locked}
-                    onChange={(event) => toggleRole(role, event.target.checked)}
+              {ALL_ROLES.map((option) => (
+                <label
+                  key={option}
+                  htmlFor={`role-${option}`}
+                  className="text-foreground flex items-center gap-2 text-sm"
+                >
+                  <input
+                    type="radio"
+                    id={`role-${option}`}
+                    name="user-role"
+                    className="accent-brand-600 border-border h-4 w-4"
+                    checked={role === option}
+                    disabled={isSelf}
+                    onChange={() => setRole(option)}
                   />
-                );
-              })}
+                  {isSelf && option === "Admin" ? `${option} (you)` : option}
+                </label>
+              ))}
             </div>
+            {isSelf ? (
+              <p className="text-muted-2 mt-1 text-xs">
+                You cannot change your own role.
+              </p>
+            ) : null}
           </div>
 
           <div>
@@ -110,7 +117,7 @@ export function UserEditDialog({
           <Button variant="outline" onClick={onClose} disabled={saving}>
             Cancel
           </Button>
-          <Button onClick={save} disabled={saving || roles.length === 0}>
+          <Button onClick={save} disabled={saving}>
             {saving ? "Saving…" : "Save"}
           </Button>
         </div>

@@ -10,7 +10,7 @@ import { Button } from "@/components/ui";
 import { useAuth } from "@/hooks/use-auth";
 import { loginSchema, type LoginValues } from "@/lib/validations/auth";
 
-import { FormField } from "@/components/forms";
+import { FormField, PasswordField } from "@/components/forms";
 
 export function LoginForm() {
   const { login } = useAuth();
@@ -56,10 +56,9 @@ export function LoginForm() {
         error={errors.email?.message}
         {...register("email")}
       />
-      <FormField
+      <PasswordField
         id="password"
         label="Password"
-        type="password"
         autoComplete="current-password"
         error={errors.password?.message}
         {...register("password")}
@@ -71,14 +70,17 @@ export function LoginForm() {
 
       <Link
         href="/forgot-password"
-        className="text-brand-700 hover:text-brand-800 text-center text-sm"
+        className="text-brand-700 hover:text-brand-800 dark:text-brand-300 dark:hover:text-brand-200 text-center text-sm font-medium"
       >
         Forgot password?
       </Link>
 
-      <p className="text-center text-sm text-muted">
+      <p className="text-muted text-center text-sm">
         Don&apos;t have an account?{" "}
-        <Link href="/register" className="text-brand-700 hover:text-brand-800">
+        <Link
+          href="/register"
+          className="text-brand-700 hover:text-brand-800 dark:text-brand-300 dark:hover:text-brand-200 font-medium"
+        >
           Create one
         </Link>
       </p>

@@ -12,7 +12,7 @@ import {
   type ResetPasswordValues,
 } from "@/lib/validations/auth";
 
-import { FormField } from "@/components/forms";
+import { PasswordField } from "@/components/forms";
 
 export function ResetPasswordForm() {
   const searchParams = useSearchParams();
@@ -65,7 +65,7 @@ export function ResetPasswordForm() {
 
   if (succeeded) {
     return (
-      <div className="flex flex-col gap-4 text-sm text-muted">
+      <div className="text-muted flex flex-col gap-4 text-sm">
         <p>
           Your password has been reset. You can now sign in with your new
           password.
@@ -89,18 +89,16 @@ export function ResetPasswordForm() {
         </p>
       ) : null}
 
-      <FormField
+      <PasswordField
         id="password"
         label="New password"
-        type="password"
         autoComplete="new-password"
         error={errors.password?.message}
         {...register("password")}
       />
-      <FormField
+      <PasswordField
         id="confirmPassword"
         label="Confirm new password"
-        type="password"
         autoComplete="new-password"
         error={errors.confirmPassword?.message}
         {...register("confirmPassword")}

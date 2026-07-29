@@ -37,14 +37,24 @@ export async function apiFetch(
       },
     });
 
-  let response = await send(tokenStore.get());
+  try {
+    let response = await send(tokenStore.get());
 
-  if (response.status === 401) {
-    const refreshed = await tryRefresh();
-    if (refreshed) {
-      response = await send(refreshed);
+    if (response.status === 401) {
+      const refreshed = await tryRefresh();
+      if (refreshed) {
+        response = await send(refreshed);
+      }
     }
-  }
 
-  return response;
+    return response;
+  } catch {
+    // fetch() rejects (throws) only on network-level failures — the server is
+    // unreachable, connection refused, or the request was blocked. It never
+    // throws for HTTP error statuses (those come back as a Response). Turn the
+    // browser's opaque "Failed to fetch" into an actionable message.
+    throw new Error(
+      "Unable to reach the server. Please make sure the API is running.",
+    );
+  }
 }

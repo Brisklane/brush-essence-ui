@@ -8,7 +8,10 @@ export const paintingFormSchema = z.object({
   price: z.coerce
     .number()
     .positive("Price must be greater than 0.")
-    .refine((n) => Number.isInteger(n), "Price must be a whole number (no decimals)."),
+    .refine(
+      (n) => Number.isInteger(n),
+      "Price must be a whole number (no decimals).",
+    ),
   // Dimensions are entered in inches; cm is derived automatically on submit.
   widthIn: z.coerce.number().positive("Width must be greater than 0."),
   heightIn: z.coerce.number().positive("Height must be greater than 0."),
